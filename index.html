@@ -1714,47 +1714,45 @@
     elements.projectForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Set the selected mood in the hidden field
-      document.getElementById('selectedMoodInput').value = state.selectedMood || 'not selected';
+       // collect form data
+  const d = new FormData(elements.projectForm);
 
-      // Get form data
-      const formData = new FormData(elements.projectForm);
+  const msg =
+`Name: ${d.get('name')}
+Project Type: ${d.get('projectType')}
+Video Length: ${d.get('videoLength')}
+Deadline: ${d.get('deadline')}
+Budget: ${d.get('budget')}
+Mood: ${state.selectedMood}`;
 
-      // Disable submit button while processing
-      const submitBtn = elements.projectForm.querySelector('.submit-btn');
-      const originalText = submitBtn.textContent;
-      submitBtn.textContent = 'Sending...';
-      submitBtn.disabled = true;
+  // close modal
+  closeModal();
 
-      try {
-        // Submit to Netlify Forms
-        const response = await fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(formData).toString()
-        });
+  // reset modal UI for next open
+  setTimeout(() => {
+    resetModal();
+  }, 400);
 
-        if (response.ok) {
-          // Show success state
-          elements.modalFormContent.style.display = 'none';
-          elements.modalSuccess.classList.add('visible');
+  // go to loading screen
+  showScreen('loading');
 
-          // Auto close after delay
-          setTimeout(() => {
-            closeModal();
-            // Reset form after modal closes
-            setTimeout(resetModal, 400);
-          }, 3000);
-        } else {
-          throw new Error('Form submission failed');
-        }
-      } catch (error) {
-        console.error('Submission error:', error);
-        alert('There was an issue sending your details. Please try again or contact directly via email.');
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-      }
-    });
-  </script>
+  // delay then trigger email
+  setTimeout(() => {
+    window.location.href =
+      `mailto:kailarysathwik@gmail.com?subject=Project Request&body=${encodeURIComponent(msg)}`;
+  }, 1200);
+});
+
+/* ==============================
+   END OF FILE INITIALIZATION
+============================== */
+
+// optional: default cinematic theme on load
+applyTheme('cinematic');
+
+// ensure mood screen is active on refresh
+showScreen('mood');
+
+</script>
 </body>
 </html>
