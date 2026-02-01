@@ -10,6 +10,7 @@
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
+/* ===== THEME VARIABLES ===== */
 :root{
 --bg:#0a0a0f;
 --bg-secondary:#12121a;
@@ -28,15 +29,8 @@ color:var(--text);
 transition:background var(--transition),color var(--transition);
 }
 
-.container{
-position:relative;
-width:100%;
-height:100%;
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
+/* ===== SCREENS ===== */
+.container{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
 .screen{
 position:absolute;
 inset:0;
@@ -47,9 +41,9 @@ opacity:0;
 visibility:hidden;
 transition:.6s;
 }
-
 .screen.active{opacity:1;visibility:visible}
 
+/* ===== LOADER ===== */
 .loader{
 width:48px;height:48px;
 border-radius:50%;
@@ -58,9 +52,9 @@ border-top-color:var(--accent);
 animation:spin 1s linear infinite;
 margin:auto;
 }
-
 @keyframes spin{to{transform:rotate(360deg)}}
 
+/* ===== SIMPLE TEXT ===== */
 h1{font-family:Playfair Display,serif;font-weight:400}
 p{color:var(--text-muted)}
 </style>
@@ -75,7 +69,7 @@ p{color:var(--text-muted)}
   <h1>Choose Your Mood</h1>
 </div>
 
-<!-- UNLOCK (kept as is, not used now) -->
+<!-- UNLOCK -->
 <div class="screen" id="unlockScreen">
   <h1>Focus to Unlock</h1>
 </div>
@@ -89,7 +83,7 @@ p{color:var(--text-muted)}
 <div class="screen" id="loadingScreen">
   <div style="text-align:center">
     <div class="loader"></div>
-    <p style="margin-top:1rem">Preparing your email…</p>
+    <p id="loadingText" style="margin-top:1rem">Preparing your email…</p>
     <p id="fallbackHint" style="margin-top:.6rem;font-size:.75rem;display:none">
       If nothing opens, Gmail will open automatically.
     </p>
@@ -99,7 +93,7 @@ p{color:var(--text-muted)}
 </div>
 
 <!-- MODAL -->
-<div id="projectModal" style="display:none">
+<div class="modal-overlay" id="projectModal" style="display:none">
 <form id="projectForm">
 <input name="name" placeholder="Name" required>
 <input name="projectType" placeholder="Project Type" required>
@@ -121,20 +115,16 @@ loadingScreen:document.getElementById("loadingScreen"),
 projectModal:document.getElementById("projectModal"),
 startProjectBtn:document.getElementById("startProjectBtn"),
 projectForm:document.getElementById("projectForm"),
+loadingText:document.getElementById("loadingText"),
 fallbackHint:document.getElementById("fallbackHint")
 };
 
-function showScreen(name){
+function showScreen(s){
 Object.values(elements).forEach(e=>{
- if(e?.classList) e.classList.remove("active");
+ if(e?.classList) e.classList.remove("active")
 });
-elements[name+"Screen"]?.classList.add("active");
+elements[s+"Screen"]?.classList.add("active");
 }
-
-/* 🔑 FIX: auto move from Mood → Contact */
-setTimeout(()=>{
-  showScreen("contact");
-},800);
 
 elements.startProjectBtn.onclick=()=>{
 elements.projectModal.style.display="block";
@@ -161,8 +151,6 @@ const body=encodeURIComponent(msg);
 
 const mailto=`mailto:kailarysathwik@gmail.com?subject=${subject}&body=${body}`;
 const gmail=`https://mail.google.com/mail/?view=cm&fs=1&to=kailarysathwik@gmail.com&su=${subject}&body=${body}`;
-
-const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 if(isMobile){
 location.href=mailto;
