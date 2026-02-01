@@ -1,4 +1,4 @@
-<html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -105,34 +105,39 @@ p{color:var(--text-muted)}
 </div>
 
 <script>
-const state={ selectedMood:"cinematic" };
+/* ===== STATE ===== */
+const state = { selectedMood: "cinematic" };
 
-const screens={
-  mood:document.getElementById("moodScreen"),
-  unlock:document.getElementById("unlockScreen"),
-  contact:document.getElementById("contactScreen"),
-  loading:document.getElementById("loadingScreen")
+/* ===== SCREEN REFERENCES (FIX 1 & 2) ===== */
+const screens = {
+  mood: document.getElementById("moodScreen"),
+  unlock: document.getElementById("unlockScreen"),
+  contact: document.getElementById("contactScreen"),
+  loading: document.getElementById("loadingScreen")
 };
 
-const projectModal=document.getElementById("projectModal");
-const startProjectBtn=document.getElementById("startProjectBtn");
-const projectForm=document.getElementById("projectForm");
-const fallbackHint=document.getElementById("fallbackHint");
+const projectModal = document.getElementById("projectModal");
+const startProjectBtn = document.getElementById("startProjectBtn");
+const projectForm = document.getElementById("projectForm");
+const fallbackHint = document.getElementById("fallbackHint");
 
+/* ===== SCREEN SWITCH ===== */
 function showScreen(name){
-  Object.values(screens).forEach(s=>s.classList.remove("active"));
+  Object.values(screens).forEach(s => s.classList.remove("active"));
   screens[name].classList.add("active");
 }
 
-startProjectBtn.onclick=()=>{
-  projectModal.style.display="block";
+/* ===== OPEN MODAL ===== */
+startProjectBtn.onclick = () => {
+  projectModal.style.display = "block";
 };
 
-projectForm.addEventListener("submit",e=>{
+/* ===== FORM SUBMIT (FIX 3) ===== */
+projectForm.addEventListener("submit", e => {
   e.preventDefault();
 
-  const d=new FormData(projectForm);
-  const msg=
+  const d = new FormData(projectForm);
+  const msg =
 `Name: ${d.get("name")}
 Project: ${d.get("projectType")}
 Length: ${d.get("videoLength")}
@@ -140,32 +145,33 @@ Deadline: ${d.get("deadline")}
 Budget: ${d.get("budget")}
 Mood: ${state.selectedMood}`;
 
-  projectModal.style.display="none";
+  projectModal.style.display = "none";
   showScreen("loading");
 
-  setTimeout(()=>{
-    const subject=encodeURIComponent("Project Request");
-    const body=encodeURIComponent(msg);
+  setTimeout(() => {
+    const subject = encodeURIComponent("Project Request");
+    const body = encodeURIComponent(msg);
 
-    const mailto=`mailto:kailarysathwik@gmail.com?subject=${subject}&body=${body}`;
-    const gmail=`https://mail.google.com/mail/?view=cm&fs=1&to=kailarysathwik@gmail.com&su=${subject}&body=${body}`;
+    const mailto =
+      `mailto:kailarysathwik@gmail.com?subject=${subject}&body=${body}`;
+    const gmail =
+      `https://mail.google.com/mail/?view=cm&fs=1&to=kailarysathwik@gmail.com&su=${subject}&body=${body}`;
 
-    const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    if(isMobile){
-      window.location.href=mailto;
-    }else{
-      fallbackHint.style.display="block";
-      window.open(mailto,"_self");
+    if (isMobile) {
+      window.location.href = mailto;
+    } else {
+      fallbackHint.style.display = "block";
+      window.open(mailto, "_self");
 
-      setTimeout(()=>{
-        window.open(gmail,"_blank");
-      },1200);
+      setTimeout(() => {
+        window.open(gmail, "_blank");
+      }, 1200);
     }
-  },1000);
+  }, 1000);
 });
 </script>
 
 </body>
 </html>
-
