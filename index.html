@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Cut by Focus</title>
+  <title>Cut By Focus</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
@@ -162,9 +162,9 @@
     <h1>Choose the mood</h1>
     <p>This sets the tone.</p>
     <div class="moods">
-      <button class="mood-btn" onclick="selectMood('calm')">Calm</button>
-      <button class="mood-btn" onclick="selectMood('energetic')">Energetic</button>
-      <button class="mood-btn" onclick="selectMood('cinematic')">Cinematic</button>
+      <button class="mood-btn" data-mood="calm">Calm</button>
+      <button class="mood-btn" data-mood="energetic">Energetic</button>
+      <button class="mood-btn" data-mood="cinematic">Cinematic</button>
     </div>
   </div>
 
@@ -230,6 +230,13 @@
       haptic([8]);
       show('unlock');
     }
+
+    // ✅ Mood button binding (FIXED)
+    document.querySelectorAll('.mood-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectMood(btn.dataset.mood);
+      });
+    });
 
     const ring = document.getElementById('unlockRing');
     ring.addEventListener('mousedown', startHold);
