@@ -1819,16 +1819,16 @@ setTimeout(() => {
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   if (isMobile) {
-    // mobile → mailto only
+    // mobile → mail app
     window.location.href = mailtoURL;
   } else {
-    // desktop → try mailto first
+    // desktop → try mailto
     window.location.href = mailtoURL;
 
-    // fallback to Gmail web
+    // fallback: redirect SAME TAB to Gmail web
     setTimeout(() => {
-      window.open(gmailWebURL, "_blank");
-    }, 600);
+      window.location.href = gmailWebURL;
+    }, 700);
   }
 }, 1200);
 
