@@ -5,206 +5,187 @@
 <title>Cut By Focus</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
+/* ===== ROOT THEME ===== */
 :root{
-  --bg-dark:#050505;
-  --bg-mid:#0e0e0e;
-  --accent:#ffb454;
-  --text:#ffffff;
-  --muted:rgba(255,255,255,.55);
+  --bg:#0a0a0f;
+  --bg2:#12121a;
+  --accent:#d4af37;
+  --accentGlow:rgba(212,175,55,.35);
+  --text:#f5f0e6;
+  --muted:#9a9080;
 }
 
-/* RESET */
+/* ===== RESET ===== */
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+  font-family:Inter,system-ui,sans-serif;
 }
 
-/* BODY – ROYAL CINEMATIC BACKGROUND */
-body{
-  height:100vh;
+html,body{
+  height:100%;
   overflow:hidden;
-  color:var(--text);
-  background:
-    radial-gradient(1200px 700px at 15% -10%, rgba(255,180,80,.18), transparent 60%),
-    radial-gradient(900px 600px at 85% 25%, rgba(120,160,255,.12), transparent 65%),
-    linear-gradient(180deg, var(--bg-mid), var(--bg-dark));
 }
 
-/* FILM GRAIN */
+body{
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* ===== AMBIENCE ===== */
 body::after{
   content:"";
   position:fixed;
   inset:0;
   background-image:url("https://grainy-gradients.vercel.app/noise.svg");
-  opacity:.045;
+  opacity:.04;
   pointer-events:none;
-  z-index:0;
 }
 
-/* SCREENS */
+/* ===== SCREENS ===== */
 .screen{
   position:absolute;
   inset:0;
   display:flex;
-  flex-direction:column;
   align-items:center;
   justify-content:center;
-  text-align:center;
-  padding:2rem;
+  flex-direction:column;
   opacity:0;
   pointer-events:none;
-  transition:opacity .6s ease;
-  z-index:1;
+  transition:.6s ease;
 }
 .screen.active{
   opacity:1;
   pointer-events:auto;
 }
 
-/* TEXT */
+/* ===== TEXT ===== */
 h1{
-  font-size:clamp(1.9rem,5vw,2.7rem);
-  font-weight:500;
-  letter-spacing:.45px;
-  text-shadow:0 3px 15px rgba(0,0,0,.55);
+  font-family:Playfair Display,serif;
+  font-size:clamp(1.8rem,5vw,2.8rem);
+  font-weight:400;
 }
 p{
   margin-top:.6rem;
   color:var(--muted);
   max-width:420px;
-  line-height:1.55;
+  text-align:center;
 }
 
-/* MOOD BUTTONS */
+/* ===== MOOD ===== */
 .moods{
   display:flex;
-  gap:1.1rem;
-  margin-top:2.6rem;
-  flex-wrap:wrap;
-  justify-content:center;
+  gap:1.5rem;
+  margin-top:3rem;
 }
-.mood-btn{
-  padding:.9rem 2rem;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.3);
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.03));
-  backdrop-filter:blur(8px);
-  color:var(--text);
+.mood{
+  width:160px;
+  height:200px;
+  border-radius:10px;
   cursor:pointer;
-  box-shadow:
-    0 14px 40px rgba(0,0,0,.45),
-    inset 0 1px 0 rgba(255,255,255,.18);
-  transition:.35s ease;
+  background:linear-gradient(135deg,#1f1a10,#12121a);
+  border:1px solid rgba(255,255,255,.08);
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding-bottom:1.2rem;
+  transition:.4s ease;
 }
-.mood-btn:hover{
-  transform:translateY(-3px);
-  box-shadow:
-    0 22px 60px rgba(0,0,0,.65),
-    inset 0 1px 0 rgba(255,255,255,.28);
+.mood:hover{
+  transform:translateY(-8px);
+  border-color:var(--accent);
+  box-shadow:0 20px 60px -20px var(--accentGlow);
+}
+.mood span{
+  letter-spacing:.15em;
+  font-size:.75rem;
 }
 
-/* UNLOCK */
+/* ===== UNLOCK ===== */
 .focus-ring{
-  width:190px;
-  height:190px;
-  margin-top:2.8rem;
+  width:180px;
+  height:180px;
   border-radius:50%;
-  border:1px solid rgba(255,180,80,.75);
+  border:2px solid var(--accent);
   display:flex;
   align-items:center;
   justify-content:center;
-  box-shadow:
-    0 0 60px rgba(255,180,80,.45),
-    inset 0 0 35px rgba(255,180,80,.22);
-  animation:pulse 2.8s ease-in-out infinite;
+  box-shadow:0 0 40px var(--accentGlow);
+  animation:pulse 2.6s infinite;
+  cursor:pointer;
 }
 @keyframes pulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.045)}
+  50%{transform:scale(1.05)}
 }
 .focus-ring span{
-  font-size:.85rem;
   color:var(--muted);
+  font-size:.85rem;
 }
 
-/* FORM */
+/* ===== FORM ===== */
 form{
-  margin-top:2.2rem;
   width:100%;
   max-width:420px;
+  margin-top:2rem;
 }
 input,select,button{
   width:100%;
-  padding:.85rem;
-  margin-bottom:.85rem;
-  background:rgba(18,18,18,.7);
-  backdrop-filter:blur(10px);
+  padding:.9rem;
+  margin-bottom:.9rem;
+  background:var(--bg2);
+  border:1px solid rgba(255,255,255,.15);
   border-radius:12px;
-  border:1px solid rgba(255,255,255,.25);
   color:var(--text);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.1),
-    0 12px 30px rgba(0,0,0,.45);
 }
 button{
-  border-radius:999px;
-  background:linear-gradient(180deg,var(--accent),#ffd9a0);
+  background:linear-gradient(180deg,var(--accent),#ffe2a8);
   color:#000;
   font-weight:500;
-  letter-spacing:.35px;
+  border-radius:999px;
   cursor:pointer;
-  box-shadow:
-    0 18px 45px rgba(0,0,0,.55),
-    inset 0 1px 0 rgba(255,255,255,.28);
 }
 
-/* LOADING */
+/* ===== LOADER ===== */
 .loader{
   width:64px;
   height:64px;
   border-radius:50%;
-  border:2px solid rgba(255,255,255,.18);
+  border:2px solid rgba(255,255,255,.2);
   border-top-color:var(--accent);
   animation:spin 1s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* MOBILE */
-@media(max-width:480px){
-  body{overflow-y:auto}
-}
 </style>
 </head>
 
 <body>
 
 <!-- MOOD -->
-<div class="screen active" id="mood">
-  <h1>Choose the mood</h1>
-  <p>This defines the tone of the edit.</p>
+<div class="screen active" id="moodScreen">
+  <h1>Choose Your Mood</h1>
+  <p>Select the tone of your edit</p>
   <div class="moods">
-    <button class="mood-btn" data-mood="Calm">Calm</button>
-    <button class="mood-btn" data-mood="Energetic">Energetic</button>
-    <button class="mood-btn" data-mood="Cinematic">Cinematic</button>
+    <div class="mood" data-mood="Calm"><span>CALM</span></div>
+    <div class="mood" data-mood="Energetic"><span>ENERGETIC</span></div>
+    <div class="mood" data-mood="Cinematic"><span>CINEMATIC</span></div>
   </div>
 </div>
 
 <!-- UNLOCK -->
-<div class="screen" id="unlock">
-  <h1>Align focus</h1>
+<div class="screen" id="unlockScreen">
+  <h1>Align Focus</h1>
   <p>Press and hold to continue</p>
-  <div class="focus-ring" id="ring"><span>Hold</span></div>
+  <div class="focus-ring" id="holdRing"><span>Hold</span></div>
 </div>
 
 <!-- FORM -->
-<div class="screen" id="form">
-  <h1>Project details</h1>
-  <p>I’ll review this personally.</p>
-
+<div class="screen" id="formScreen">
+  <h1>Project Details</h1>
+  <p>I’ll review this personally</p>
   <form id="projectForm">
     <input name="name" placeholder="Your name" required>
     <input name="project" placeholder="Project type" required>
@@ -212,7 +193,6 @@ button{
     <input name="deadline" placeholder="Deadline">
     <select name="budget">
       <option value="">Prefer not to say</option>
-      <option>Discuss with editor</option>
       <option>Under ₹200</option>
       <option>₹200 – ₹500</option>
       <option>₹500+</option>
@@ -222,63 +202,60 @@ button{
 </div>
 
 <!-- LOADING -->
-<div class="screen" id="loading">
+<div class="screen" id="loadingScreen">
   <div class="loader"></div>
   <p style="margin-top:1rem">Preparing message…</p>
 </div>
 
 <script>
-const screens={mood,unlock,form,loading};
-let selectedMood='Calm',hold;
+const screens={
+  mood:moodScreen,
+  unlock:unlockScreen,
+  form:formScreen,
+  loading:loadingScreen
+};
+
+let selectedMood="Calm", holdTimer;
 
 function show(s){
-  Object.values(screens).forEach(x=>x.classList.remove('active'));
-  screens[s].classList.add('active');
+  Object.values(screens).forEach(x=>x.classList.remove("active"));
+  screens[s].classList.add("active");
 }
 
-function vibrate(p){navigator.vibrate&&navigator.vibrate(p);}
-
-document.querySelectorAll('.mood-btn').forEach(b=>{
-  b.addEventListener('click',()=>{
-    selectedMood=b.dataset.mood;
-    vibrate([10]);
-    show('unlock');
-  });
+document.querySelectorAll(".mood").forEach(m=>{
+  m.onclick=()=>{
+    selectedMood=m.dataset.mood;
+    show("unlock");
+  };
 });
 
-ring.addEventListener('mousedown',startHold);
-ring.addEventListener('touchstart',startHold);
+holdRing.addEventListener("mousedown",startHold);
+holdRing.addEventListener("touchstart",startHold);
 
 function startHold(){
-  vibrate([10]);
-  hold=setTimeout(()=>{
-    vibrate([20,30,20]);
-    show('form');
-  },850);
+  holdTimer=setTimeout(()=>show("form"),850);
 }
-
-['mouseup','mouseleave','touchend'].forEach(e=>{
-  ring.addEventListener(e,()=>clearTimeout(hold));
+["mouseup","mouseleave","touchend"].forEach(e=>{
+  holdRing.addEventListener(e,()=>clearTimeout(holdTimer));
 });
 
-projectForm.addEventListener('submit',e=>{
+projectForm.onsubmit=e=>{
   e.preventDefault();
-  vibrate([15]);
-  show('loading');
+  show("loading");
 
   const d=new FormData(projectForm);
-  const msg=`Name: ${d.get('name')}
-Project: ${d.get('project')}
-Length: ${d.get('length')}
-Deadline: ${d.get('deadline')}
-Budget: ${d.get('budget')}
+  const msg=
+`Name: ${d.get("name")}
+Project: ${d.get("project")}
+Length: ${d.get("length")}
+Deadline: ${d.get("deadline")}
+Budget: ${d.get("budget")}
 Mood: ${selectedMood}`;
 
   setTimeout(()=>{
-    window.location.href=
-      `mailto:kailarysathwik@gmail.com?subject=Project Request&body=${encodeURIComponent(msg)}`;
+    location.href=`mailto:kailarysathwik@gmail.com?subject=Project Request&body=${encodeURIComponent(msg)}`;
   },1200);
-});
+};
 </script>
 
 </body>
