@@ -1806,10 +1806,32 @@ Mood: ${state.selectedMood}`;
   showScreen('loading');
 
   // delay then trigger email
-  setTimeout(() => {
-    window.location.href =
-      `mailto:kailarysathwik@gmail.com?subject=Project Request&body=${encodeURIComponent(msg)}`;
-  }, 1200);
+setTimeout(() => {
+  const subject = encodeURIComponent("Project Request");
+  const body = encodeURIComponent(msg);
+
+  const mailtoURL =
+    `mailto:kailarysathwik@gmail.com?subject=${subject}&body=${body}`;
+
+  const gmailWebURL =
+    `https://mail.google.com/mail/?view=cm&fs=1&to=kailarysathwik@gmail.com&su=${subject}&body=${body}`;
+
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  if (isMobile) {
+    // mobile → mailto only
+    window.location.href = mailtoURL;
+  } else {
+    // desktop → try mailto first
+    window.location.href = mailtoURL;
+
+    // fallback to Gmail web
+    setTimeout(() => {
+      window.open(gmailWebURL, "_blank");
+    }, 600);
+  }
+}, 1200);
+
 });
 
 /* ==============================
