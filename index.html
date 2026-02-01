@@ -1151,6 +1151,58 @@
   }
 }
 
+ /* ===== Send Overlay (Mail Bridge) ===== */
+.send-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.send-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.send-content {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.send-content h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.3rem, 4vw, 1.6rem);
+  font-weight: 400;
+  margin-top: 1.25rem;
+}
+
+.send-content p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 0.4rem;
+}
+
+/* Spinner */
+.send-spinner {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.15);
+  border-top-color: var(--accent);
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
   </style>
 </head>
 <body>
@@ -1381,6 +1433,8 @@
   </div>
 
   <script>
+
+    
     function haptic(pattern = [10]) {
   if (navigator.vibrate) {
     navigator.vibrate(pattern);
@@ -1789,43 +1843,37 @@
       }
     });
 
-   elements.projectForm.addEventListener('submit', async (e) => {
+   elements.projectForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  haptic([15]); // submit tap feedback
+  // Haptic feedback (mobile)
+  haptic([15]);
 
-      // Set the selected mood in the hidden field
-      document.getElementById('selectedMoodInput').value = state.selectedMood || 'not selected';
+  // Show loading overlay
+  const overlay = document.getElementById('sendOverlay');
+  overlay.classList.add('active');
 
-      // Get form data
-      const formData = new FormData(elements.projectForm);
+  // Collect form data
+  const data = new FormData(elements.projectForm);
 
-      // Disable submit button while processing
-      const submitBtn = elements.projectForm.querySelector('.submit-btn');
-      const originalText = submitBtn.textContent;
-      submitBtn.textContent = 'Sending...';
-      submitBtn.disabled = true;
+  const bodyText = `
+Name: ${data.get('name')}
+Project Type: ${data.get('projectType')}
+Video Length: ${data.get('videoLength')}
+Deadline: ${data.get('deadline')}
+Budget: ${data.get('budget') || 'Discuss with editor'}
+Mood Selected: ${state.selectedMood}
+`;
 
-      try {
-        // Submit to Netlify Forms
-        const response = await fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(formData).toString()
-        });
-
-        if (response.ok) {
-          // Show success state
-          elements.modalFormContent.style.display = 'none';
-          elements.modalSuccess.classList.add('visible');
-
-          // Auto close after delay
-          setTimeout(() => {
-            closeModal();
-            // Reset form after modal closes
-            setTimeout(resetModal, 400);
-          }, 3000);
-        } else {
+  // Cinematic delay before opening mail app
+  setTimeout(() => {
+    window.location.href =
+      `mailto:kailarysathwik@gmail.com` +
+      `?subject=New Project Request` +
+      `&body=${encodeURIComponent(bodyText)}`;
+  }, 1200);
+});
+     else {
           throw new Error('Form submission failed');
         }
       } catch (error) {
@@ -1836,5 +1884,14 @@
       }
     });
   </script>
+<div class="send-overlay" id="sendOverlay">
+  <div class="send-content">
+    <div class="send-spinner"></div>
+    <h2>Preparing message</h2>
+    <p>Opening your email app…</p>
+  </div>
+</div>
+
 </body>
+
 </html>
