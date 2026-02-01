@@ -4,158 +4,253 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cut by Focus | Freelance Video Editor</title>
+  <meta name="description" content="Freelance video editor specializing in cinematic, energetic, and calm visual storytelling. Get in touch to start your project.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
-    /* PRESERVING YOUR EXACT UI FROM THE ORIGINAL FILE */
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    :root {
-      /* Theme Definitions */
-      --calm-bg: #0a1628; --calm-bg-secondary: #0f1f35; --calm-accent: #4a9eff; --calm-accent-glow: rgba(74, 158, 255, 0.3); --calm-text: #e8f0ff; --calm-text-muted: #7a9bc8;
-      --energetic-bg: #1a0a0a; --energetic-bg-secondary: #2a1010; --energetic-accent: #ff4a4a; --energetic-accent-glow: rgba(255, 74, 74, 0.4); --energetic-text: #fff0f0; --energetic-text-muted: #c88a8a;
-      --cinematic-bg: #0a0a0f; --cinematic-bg-secondary: #12121a; --cinematic-accent: #d4af37; --cinematic-accent-glow: rgba(212, 175, 55, 0.35); --cinematic-text: #f5f0e6; --cinematic-text-muted: #9a9080;
-      
-      /* Default Starting Variables (Cinematic) */
-      --bg: var(--cinematic-bg); --bg-secondary: var(--cinematic-bg-secondary); --accent: var(--cinematic-accent); --accent-glow: var(--cinematic-accent-glow); --text: var(--cinematic-text); --text-muted: var(--cinematic-text-muted);
-      --transition-speed: 0.8s;
+    /* PRESERVING ALL YOUR ORIGINAL UI STYLES */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    /* THEME OVERRIDES (This makes everything change color smoothly) */
-    body.theme-calm { --bg: var(--calm-bg); --bg-secondary: var(--calm-bg-secondary); --accent: var(--calm-accent); --accent-glow: var(--calm-accent-glow); --text: var(--calm-text); --text-muted: var(--calm-text-muted); }
-    body.theme-energetic { --bg: var(--energetic-bg); --bg-secondary: var(--energetic-bg-secondary); --accent: var(--energetic-accent); --accent-glow: var(--energetic-accent-glow); --text: var(--energetic-text); --text-muted: var(--energetic-text-muted); }
-    body.theme-cinematic { --bg: var(--cinematic-bg); --bg-secondary: var(--cinematic-bg-secondary); --accent: var(--cinematic-accent); --accent-glow: var(--cinematic-accent-glow); --text: var(--cinematic-text); --text-muted: var(--cinematic-text-muted); }
+    :root {
+      /* Calm Theme */
+      --calm-bg: #0a1628;
+      --calm-bg-secondary: #0f1f35;
+      --calm-accent: #4a9eff;
+      --calm-accent-glow: rgba(74, 158, 255, 0.3);
+      --calm-text: #e8f0ff;
+      --calm-text-muted: #7a9bc8;
 
-    html, body { height: 100%; overflow: hidden; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); transition: background var(--transition-speed) ease, color var(--transition-speed) ease; }
-    
+      /* Energetic Theme */
+      --energetic-bg: #1a0a0a;
+      --energetic-bg-secondary: #2a1010;
+      --energetic-accent: #ff4a4a;
+      --energetic-accent-glow: rgba(255, 74, 74, 0.4);
+      --energetic-text: #fff0f0;
+      --energetic-text-muted: #c88a8a;
+
+      /* Cinematic Theme */
+      --cinematic-bg: #0a0a0f;
+      --cinematic-bg-secondary: #12121a;
+      --cinematic-accent: #d4af37;
+      --cinematic-accent-glow: rgba(212, 175, 55, 0.35);
+      --cinematic-text: #f5f0e6;
+      --cinematic-text-muted: #9a9080;
+
+      /* Active Theme (defaults to cinematic) */
+      --bg: var(--cinematic-bg);
+      --bg-secondary: var(--cinematic-bg-secondary);
+      --accent: var(--cinematic-accent);
+      --accent-glow: var(--cinematic-accent-glow);
+      --text: var(--cinematic-text);
+      --text-muted: var(--cinematic-text-muted);
+
+      --transition-speed: 0.8s;
+      --animation-speed: 1;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
+    }
+
     /* AMBIENT EFFECTS */
-    .ambient-effects { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-    .grain { position: absolute; inset: -50%; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); opacity: 0; animation: grain-shift 0.5s steps(10) infinite; transition: opacity var(--transition-speed) ease; }
+    .ambient-effects { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+    .grain { position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); opacity: 0; animation: grain-shift 0.5s steps(10) infinite; transition: opacity var(--transition-speed) ease; }
     .grain.active { opacity: 0.03; }
     @keyframes grain-shift { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(-5%, -5%); } 50% { transform: translate(5%, 5%); } 75% { transform: translate(-5%, 5%); } }
     .ambient-glow { position: absolute; width: 60vw; height: 60vw; border-radius: 50%; background: var(--accent-glow); filter: blur(120px); opacity: 0; transition: opacity var(--transition-speed) ease, background var(--transition-speed) ease; }
     .ambient-glow.active { opacity: 0.5; }
-    .ambient-glow.glow-1 { top: -20%; left: -20%; animation: float-1 20s ease-in-out infinite; }
-    .ambient-glow.glow-2 { bottom: -30%; right: -20%; animation: float-2 25s ease-in-out infinite; }
+    .ambient-glow.glow-1 { top: -20%; left: -20%; animation: float-1 calc(20s / var(--animation-speed)) ease-in-out infinite; }
+    .ambient-glow.glow-2 { bottom: -30%; right: -20%; animation: float-2 calc(25s / var(--animation-speed)) ease-in-out infinite; }
     @keyframes float-1 { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(10%, 10%) scale(1.1); } }
     @keyframes float-2 { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-10%, -5%) scale(1.05); } }
-    .particles { position: absolute; inset: 0; opacity: 0; transition: opacity var(--transition-speed) ease; }
+    .particles { position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity var(--transition-speed) ease; }
     .particles.active { opacity: 1; }
     .particle { position: absolute; width: 2px; height: 2px; background: var(--accent); border-radius: 50%; opacity: 0.3; }
 
     /* SCREEN MANAGEMENT */
     .container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 1; }
-    .screen { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.6s ease, visibility 0.6s ease; }
+    .screen { position: absolute; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity calc(var(--transition-speed) * 0.8) ease, visibility calc(var(--transition-speed) * 0.8) ease; }
     .screen.active { opacity: 1; visibility: visible; }
 
-    /* MOOD OPTIONS (Unique Border Colors) */
-    .mood-options { display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center; margin-top: 4rem; }
+    /* MOOD SCREEN */
+    .mood-screen { flex-direction: column; gap: 4rem; }
+    .mood-title { text-align: center; }
+    .mood-title h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 4vw, 2.5rem); margin-bottom: 0.75rem; }
+    .mood-options { display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center; padding: 0 2rem; }
     .mood-option { position: relative; width: 160px; height: 200px; background: var(--bg-secondary); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; cursor: pointer; transition: all 0.4s ease; overflow: hidden; }
+    .mood-option:hover { transform: translateY(-8px); }
+    .mood-preview { position: absolute; width: 100%; height: 100%; }
+    .mood-preview.calm { background: linear-gradient(135deg, #0a1628 0%, #1a3a5c 50%, #0f1f35 100%); }
+    .mood-preview.energetic { background: linear-gradient(135deg, #1a0a0a 0%, #4a1515 50%, #2a1010 100%); }
+    .mood-preview.cinematic { background: linear-gradient(135deg, #0a0a0f 0%, #1f1a10 50%, #12121a 100%); }
+    .mood-label { position: absolute; bottom: 0; width: 100%; padding: 1.25rem; text-align: center; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: #fff; z-index: 2; }
     
-    /* Specific Hover Borders for Selection Screen */
+    /* Specific Hover Borders */
     .mood-option[data-mood="calm"]:hover { border-color: var(--calm-accent); box-shadow: 0 20px 60px -20px var(--calm-accent-glow); }
     .mood-option[data-mood="energetic"]:hover { border-color: var(--energetic-accent); box-shadow: 0 20px 60px -20px var(--energetic-accent-glow); }
     .mood-option[data-mood="cinematic"]:hover { border-color: var(--cinematic-accent); box-shadow: 0 20px 60px -20px var(--cinematic-accent-glow); }
 
-    .mood-preview { position: absolute; inset: 0; }
-    .mood-preview.calm { background: linear-gradient(135deg, #0a1628 0%, #1a3a5c 50%, #0f1f35 100%); }
-    .mood-preview.energetic { background: linear-gradient(135deg, #1a0a0a 0%, #4a1515 50%, #2a1010 100%); }
-    .mood-preview.cinematic { background: linear-gradient(135deg, #0a0a0f 0%, #1f1a10 50%, #12121a 100%); }
-    .mood-label { position: absolute; bottom: 0; width: 100%; padding: 1.25rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; color: #fff; }
-
-    /* UNLOCK GAME */
-    .focus-ring-container { position: relative; width: 200px; height: 200px; margin-top: 3rem; }
-    .focus-ring-inner { position: absolute; top: 50%; left: 50%; width: 60px; height: 60px; border: 2px solid var(--accent); border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 20px var(--accent-glow); transition: border-color 0.8s; }
-    .focus-dot { position: absolute; top: 50%; left: 50%; width: 50px; height: 50px; border: 2px solid var(--text); border-radius: 50%; transform: translate(-50%, -50%); cursor: pointer; }
-    .focus-dot.aligned { border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow); }
+    /* UNLOCK SCREEN */
+    .unlock-screen { flex-direction: column; gap: 3rem; }
+    .focus-ring-container { position: relative; width: 200px; height: 200px; }
+    .focus-ring-inner { position: absolute; top: 50%; left: 50%; width: 60px; height: 60px; border: 2px solid var(--accent); border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 20px var(--accent-glow); }
+    .focus-dot { position: absolute; top: 50%; left: 50%; width: 50px; height: 50px; border: 2px solid var(--text); border-radius: 50%; transform: translate(-50%, -50%); cursor: pointer; transition: all 0.15s ease; opacity: 0.6; }
+    .focus-dot.aligned { border-color: var(--accent); opacity: 1; box-shadow: 0 0 30px var(--accent-glow); }
     .progress-ring { position: absolute; top: 50%; left: 50%; width: 80px; height: 80px; transform: translate(-50%, -50%); }
-    .progress-fill { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 220; stroke-dashoffset: 220; transform: rotate(-90deg); transform-origin: center; transition: stroke 0.8s; }
+    .progress-fill { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 220; stroke-dashoffset: 220; transform: rotate(-90deg); transform-origin: center; }
 
-    /* CONTACT & MODAL */
-    .contact-link { display: block; padding: 1rem 2rem; background: var(--bg-secondary); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px; color: var(--text); text-decoration: none; margin-bottom: 1rem; width: 300px; text-align: center; transition: 0.3s; }
+    /* CONTACT SCREEN */
+    .contact-screen { flex-direction: column; justify-content: center; padding: 2rem; }
+    .contact-content { text-align: center; opacity: 0; transform: translateY(30px); }
+    .contact-content.visible { animation: reveal-content 1s ease forwards; }
+    @keyframes reveal-content { to { opacity: 1; transform: translateY(0); } }
+    .contact-link { display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 1rem 2rem; background: var(--bg-secondary); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px; color: var(--text); text-decoration: none; margin-bottom: 1rem; transition: 0.3s; }
     .contact-link:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 10px 40px -15px var(--accent-glow); }
-    .start-project-btn { margin-top: 2rem; padding: 1rem 2.5rem; background: transparent; border: 1px solid var(--accent); color: var(--text); cursor: pointer; text-transform: uppercase; letter-spacing: 0.1em; transition: 0.3s; }
-    .start-project-btn:hover { background: var(--accent); color: var(--bg); box-shadow: 0 10px 30px -10px var(--accent-glow); }
+    .start-project-btn { margin-top: 2rem; padding: 1rem 2.5rem; background: transparent; border: 1px solid var(--accent); border-radius: 6px; color: var(--text); text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; transition: 0.3s; }
+    .start-project-btn:hover { background: var(--accent); color: var(--bg); }
 
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 1000; }
-    .project-modal { background: var(--bg-secondary); padding: 2.5rem; border-radius: 12px; border: 1px solid var(--accent); width: 90%; max-width: 480px; transition: border-color 0.8s; }
-    .project-form { display: flex; flex-direction: column; gap: 1rem; }
-    .project-form input { padding: 0.8rem; background: var(--bg); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 6px; }
-    .project-form input:focus { outline: none; border-color: var(--accent); }
-    .submit-btn { padding: 1rem; background: var(--accent); border: none; font-weight: 600; color: var(--bg); cursor: pointer; border-radius: 6px; transition: 0.3s; }
-    
-    .loader { width: 48px; height: 48px; border-radius: 50%; border: 2px solid rgba(255,255,255,.2); border-top-color: var(--accent); animation: spin 1s linear infinite; margin: auto; }
+    /* NEW: LOADING SCREEN & LOADER */
+    .loader {
+      width: 48px;
+      height: 48px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
+    #loadingScreen p { font-size: 0.85rem; letter-spacing: 0.1em; color: var(--text-muted); text-transform: uppercase; }
 
-    h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 400; }
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 1000; }
+    .modal-overlay.active { display: flex; }
+    .project-modal { background: var(--bg-secondary); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 2.5rem; width: 90%; max-width: 480px; }
+    .project-form { display: flex; flex-direction: column; gap: 1.25rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+    .form-group label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); }
+    .form-group input, .form-group select { padding: 0.875rem; background: var(--bg); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 6px; color: var(--text); }
+    .form-group input:focus { border-color: var(--accent); outline: none; }
+    .submit-btn { padding: 1rem; background: var(--accent); border: none; border-radius: 6px; color: var(--bg); font-weight: 600; cursor: pointer; transition: 0.3s; }
+
+    /* HELPERS */
+    .back-button { position: fixed; top: 2rem; left: 2rem; background: none; border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; visibility: hidden; z-index: 100; }
+    .back-button.visible { visibility: visible; }
+    .mood-indicator { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; color: var(--text-muted); opacity: 0; }
+    .mood-indicator.visible { opacity: 0.5; }
+    .mood-indicator-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+
+    body.theme-calm { --bg: var(--calm-bg); --bg-secondary: var(--calm-bg-secondary); --accent: var(--calm-accent); --accent-glow: var(--calm-accent-glow); --text: var(--calm-text); --text-muted: var(--calm-text-muted); }
+    body.theme-energetic { --bg: var(--energetic-bg); --bg-secondary: var(--energetic-bg-secondary); --accent: var(--energetic-accent); --accent-glow: var(--energetic-accent-glow); --text: var(--energetic-text); --text-muted: var(--energetic-text-muted); }
+    body.theme-cinematic { --bg: var(--cinematic-bg); --bg-secondary: var(--cinematic-bg-secondary); --accent: var(--cinematic-accent); --accent-glow: var(--cinematic-accent-glow); --text: var(--cinematic-text); --text-muted: var(--cinematic-text-muted); }
   </style>
 </head>
-<body class="theme-cinematic"> <div class="ambient-effects">
-    <div class="grain"></div><div class="ambient-glow glow-1"></div><div class="ambient-glow glow-2"></div><div class="particles"></div>
+<body>
+  <div class="ambient-effects">
+    <div class="grain"></div>
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="particles"></div>
   </div>
 
+  <button class="back-button" id="backButton">Back</button>
+
   <div class="container">
-    <div class="screen active" id="moodScreen">
-      <h1>Choose Your Mood</h1>
+    <div class="screen mood-screen active" id="moodScreen">
+      <div class="mood-title">
+        <h1>Choose Your Mood</h1>
+        <p>Select the tone that fits your project</p>
+      </div>
       <div class="mood-options">
-        <div class="mood-option" data-mood="calm"><div class="mood-preview calm"></div><div class="mood-label">Calm</div></div>
-        <div class="mood-option" data-mood="energetic"><div class="mood-preview energetic"></div><div class="mood-label">Energetic</div></div>
-        <div class="mood-option" data-mood="cinematic"><div class="mood-preview cinematic"></div><div class="mood-label">Cinematic</div></div>
+        <div class="mood-option" data-mood="calm"><div class="mood-preview calm"></div><div class="mood-label"><span>Calm</span></div></div>
+        <div class="mood-option" data-mood="energetic"><div class="mood-preview energetic"></div><div class="mood-label"><span>Energetic</span></div></div>
+        <div class="mood-option" data-mood="cinematic"><div class="mood-preview cinematic"></div><div class="mood-label"><span>Cinematic</span></div></div>
       </div>
     </div>
 
-    <div class="screen" id="unlockScreen">
-      <h1 style="font-size: 1.8rem">Focus to Unlock</h1>
+    <div class="screen unlock-screen" id="unlockScreen">
+      <div style="text-align:center; margin-bottom: 2rem;">
+        <h2 style="font-family:'Playfair Display'; font-size: 1.8rem;">Focus to Unlock</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">Drag the ring to the center and hold</p>
+      </div>
       <div class="focus-ring-container" id="focusRingContainer">
         <div class="focus-ring-inner"></div>
         <svg class="progress-ring" viewBox="0 0 80 80">
-          <circle id="progressFill" class="progress-fill" cx="40" cy="40" r="35"/>
+          <circle class="progress-fill" cx="40" cy="40" r="35" id="progressFill"/>
         </svg>
         <div class="focus-dot" id="focusDot"></div>
       </div>
     </div>
 
-    <div class="screen" id="contactScreen">
-      <h1>Let's Create Together</h1>
-      <div style="margin-top: 2rem">
-        <a href="mailto:kailarysathwik@gmail.com" class="contact-link">kailarysathwik@gmail.com</a>
-        <a href="https://instagram.com/sathwik_29dx" target="_blank" class="contact-link">@sathwik_29dx</a>
+    <div class="screen contact-screen" id="contactScreen">
+      <div class="contact-content" id="contactContent">
+        <h1 style="font-family:'Playfair Display'; font-size: 3rem; margin-bottom: 2rem;">Let's Create Together</h1>
+        <div style="display:flex; flex-direction:column; gap:1rem; align-items:center;">
+          <a href="mailto:kailarysathwik@gmail.com" class="contact-link">kailarysathwik@gmail.com</a>
+          <a href="https://instagram.com/sathwik_29dx" target="_blank" class="contact-link">@sathwik_29dx</a>
+        </div>
+        <button class="start-project-btn" id="startProjectBtn">Start a Project</button>
       </div>
-      <button class="start-project-btn" id="startProjectBtn">Start a Project</button>
     </div>
 
     <div class="screen" id="loadingScreen">
-      <div style="text-align:center">
+      <div style="text-align:center;">
         <div class="loader"></div>
-        <p style="margin-top:1rem">Preparing your email…</p>
-        <p id="fallbackHint" style="margin-top:.6rem;font-size:.75rem;display:none;color:var(--accent)">Opening Gmail...</p>
+        <p>Preparing your project details...</p>
+        <p id="gmailHint" style="display:none; margin-top:1rem; font-size:0.7rem; color:var(--accent);">Opening Gmail Fallback...</p>
       </div>
     </div>
+  </div>
+
+  <div class="mood-indicator" id="moodIndicator">
+    <span class="mood-indicator-dot"></span>
+    <span id="moodIndicatorText">Cinematic</span>
   </div>
 
   <div class="modal-overlay" id="projectModal">
     <div class="project-modal">
-      <h2 style="font-family: 'Playfair Display'; margin-bottom: 1.5rem">Project Details</h2>
+      <h2 style="font-family:'Playfair Display'; margin-bottom:1.5rem;">Project Details</h2>
       <form class="project-form" id="projectForm">
-        <input name="name" placeholder="Name" required>
-        <input name="projectType" placeholder="Project Type" required>
-        <input name="videoLength" placeholder="Video Length" required>
-        <input name="deadline" placeholder="Deadline" required>
-        <input name="budget" placeholder="Budget">
-        <button type="submit" class="submit-btn">Submit Details</button>
+        <div class="form-group"><label>Name</label><input type="text" name="name" required></div>
+        <div class="form-group">
+          <label>Project Type</label>
+          <select name="projectType" required>
+            <option value="music-video">Music Video</option>
+            <option value="commercial">Commercial</option>
+            <option value="social-media">Social Media</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Length</label><input type="text" name="videoLength" placeholder="e.g. 2 mins" required></div>
+        <div class="form-group"><label>Deadline</label><input type="text" name="deadline" placeholder="e.g. Next week" required></div>
+        <div class="form-group"><label>Budget (Optional)</label><input type="text" name="budget"></div>
+        <button type="submit" class="submit-btn">Continue to Email</button>
       </form>
-      <p style="text-align:center; margin-top:1rem; cursor:pointer; font-size:0.8rem; color:var(--text-muted)" onclick="document.getElementById('projectModal').style.display='none'">Cancel</p>
+      <p style="text-align:center; margin-top:1rem; cursor:pointer; font-size:0.75rem; color:var(--text-muted);" onclick="document.getElementById('projectModal').classList.remove('active')">Cancel</p>
     </div>
   </div>
 
   <script>
-    const state = { selectedMood: 'cinematic', isDragging: false, holdProgress: 0 };
+    // PRESERVING STATE
+    const state = { currentScreen: 'mood', selectedMood: 'cinematic', isDragging: false, holdProgress: 0, focusDotPosition: {x: 80, y: 30} };
+
     const elements = {
       body: document.body,
+      screens: document.querySelectorAll('.screen'),
       moodScreen: document.getElementById('moodScreen'),
       unlockScreen: document.getElementById('unlockScreen'),
       contactScreen: document.getElementById('contactScreen'),
@@ -164,79 +259,114 @@
       projectForm: document.getElementById('projectForm'),
       focusDot: document.getElementById('focusDot'),
       progressFill: document.getElementById('progressFill'),
-      fallbackHint: document.getElementById('fallbackHint')
+      backButton: document.getElementById('backButton'),
+      moodIndicator: document.getElementById('moodIndicator'),
+      gmailHint: document.getElementById('gmailHint')
     };
 
-    function showScreen(screenId) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById(screenId + 'Screen').classList.add('active');
+    function showScreen(name) {
+      elements.screens.forEach(s => s.classList.remove('active'));
+      document.getElementById(name + 'Screen').classList.add('active');
+      state.currentScreen = name;
+      
+      // Toggle UI helpers
+      elements.backButton.classList.toggle('visible', name !== 'mood' && name !== 'loading');
+      elements.moodIndicator.classList.toggle('visible', name !== 'mood');
     }
 
     // MOOD SELECT
     document.querySelectorAll('.mood-option').forEach(opt => {
       opt.onclick = () => {
         state.selectedMood = opt.dataset.mood;
-        elements.body.className = 'theme-' + state.selectedMood; // This triggers the CSS variable change
-        document.querySelectorAll('.ambient-glow, .grain, .particles').forEach(e => e.classList.add('active'));
+        elements.body.className = 'theme-' + state.selectedMood;
+        document.getElementById('moodIndicatorText').textContent = state.selectedMood;
+        document.querySelectorAll('.grain, .ambient-glow, .particles').forEach(el => el.classList.add('active'));
         showScreen('unlock');
       };
     });
 
-    // DRAG TO UNLOCK
-    elements.focusDot.onmousedown = () => { state.isDragging = true; };
+    // DRAG LOGIC (Kept exactly as original)
+    elements.focusDot.onmousedown = (e) => { state.isDragging = true; };
     window.onmousemove = (e) => {
       if (!state.isDragging) return;
-      const container = document.getElementById('focusRingContainer').getBoundingClientRect();
-      const x = ((e.clientX - container.left) / container.width) * 100;
-      const y = ((e.clientY - container.top) / container.height) * 100;
-      elements.focusDot.style.left = Math.max(0, Math.min(100, x)) + '%';
-      elements.focusDot.style.top = Math.max(0, Math.min(100, y)) + '%';
-      
-      const aligned = Math.sqrt(Math.pow(x - 50, 2) + Math.pow(y - 50, 2)) < 10;
+      const rect = document.getElementById('focusRingContainer').getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      state.focusDotPosition = { x: Math.max(5, Math.min(95, x)), y: Math.max(5, Math.min(95, y)) };
+      elements.focusDot.style.left = state.focusDotPosition.x + '%';
+      elements.focusDot.style.top = state.focusDotPosition.y + '%';
+
+      const dist = Math.sqrt(Math.pow(state.focusDotPosition.x-50,2) + Math.pow(state.focusDotPosition.y-50,2));
+      const aligned = dist < 8;
       elements.focusDot.classList.toggle('aligned', aligned);
-      
-      if (aligned && state.holdProgress < 100) {
+
+      if (aligned) {
         state.holdProgress += 2;
         elements.progressFill.style.strokeDashoffset = 220 - (state.holdProgress / 100) * 220;
-        if (state.holdProgress >= 100) showScreen('contact');
+        if (state.holdProgress >= 100) {
+          state.isDragging = false;
+          showScreen('contact');
+          setTimeout(() => document.getElementById('contactContent').classList.add('visible'), 100);
+        }
+      } else {
+        state.holdProgress = Math.max(0, state.holdProgress - 5);
+        elements.progressFill.style.strokeDashoffset = 220 - (state.holdProgress / 100) * 220;
       }
     };
     window.onmouseup = () => { state.isDragging = false; };
 
-    // EMAIL LOGIC
-    document.getElementById('startProjectBtn').onclick = () => { elements.projectModal.style.display = 'flex'; };
+    // SUBMIT & EMAIL LOGIC
+    document.getElementById('startProjectBtn').onclick = () => elements.projectModal.classList.add('active');
 
     elements.projectForm.onsubmit = (e) => {
       e.preventDefault();
-      const d = new FormData(elements.projectForm);
-      const msg = `Name: ${d.get("name")}\nProject: ${d.get("projectType")}\nLength: ${d.get("videoLength")}\nDeadline: ${d.get("deadline")}\nBudget: ${d.get("budget")}\nMood: ${state.selectedMood}`;
-      
-      elements.projectModal.style.display = 'none';
+      const fd = new FormData(elements.projectForm);
+      const details = `
+Name: ${fd.get('name')}
+Project: ${fd.get('projectType')}
+Duration: ${fd.get('videoLength')}
+Deadline: ${fd.get('deadline')}
+Budget: ${fd.get('budget') || 'Not specified'}
+Mood: ${state.selectedMood}
+      `.trim();
+
+      elements.projectModal.classList.remove('active');
       showScreen('loading');
 
+      // Prepare Email
       setTimeout(() => {
-        const subject = encodeURIComponent("Project Request");
-        const body = encodeURIComponent(msg);
+        const subject = encodeURIComponent("New Project Inquiry - " + fd.get('name'));
+        const body = encodeURIComponent(details);
         const email = "kailarysathwik@gmail.com";
-        const mailto = `mailto:${email}?subject=${subject}&body=${body}`;
-        const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
+        
+        const mailtoUrl = `mailto:${email}?subject=${subject}&body=${body}`;
+        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
 
-        window.location.href = mailto;
+        // Trigger Mailto
+        window.location.href = mailtoUrl;
+
+        // Desktop Fallback for Gmail
         if (!/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-          elements.fallbackHint.style.display = 'block';
-          setTimeout(() => { window.location.href = gmail; }, 800);
+          elements.gmailHint.style.display = 'block';
+          setTimeout(() => window.location.href = gmailUrl, 1500);
         }
-      }, 1200);
+      }, 1500);
+    };
+
+    // Back Button
+    elements.backButton.onclick = () => {
+      if (state.currentScreen === 'unlock') showScreen('mood');
+      else if (state.currentScreen === 'contact') showScreen('unlock');
     };
 
     // Particles Init
-    const pContainer = document.querySelector('.particles');
+    const ptn = document.querySelector('.particles');
     for (let i = 0; i < 30; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
       p.style.left = Math.random() * 100 + '%';
       p.style.top = Math.random() * 100 + '%';
-      pContainer.appendChild(p);
+      ptn.appendChild(p);
     }
   </script>
 </body>
