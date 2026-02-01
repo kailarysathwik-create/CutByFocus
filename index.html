@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-/* ===== ROOT THEME ===== */
+/* ===== THEME SYSTEM ===== */
 :root{
   --bg:#0a0a0f;
   --bg2:#12121a;
@@ -18,6 +18,23 @@
   --muted:#9a9080;
 }
 
+body.theme-calm{
+  --bg:#0a1628;
+  --bg2:#0f1f35;
+  --accent:#4a9eff;
+  --accentGlow:rgba(74,158,255,.35);
+  --text:#e8f0ff;
+  --muted:#7a9bc8;
+}
+body.theme-energetic{
+  --bg:#1a0a0a;
+  --bg2:#2a1010;
+  --accent:#ff4a4a;
+  --accentGlow:rgba(255,74,74,.4);
+  --text:#fff0f0;
+  --muted:#c88a8a;
+}
+
 /* ===== RESET ===== */
 *{
   margin:0;
@@ -25,18 +42,15 @@
   box-sizing:border-box;
   font-family:Inter,system-ui,sans-serif;
 }
-
 html,body{
   height:100%;
   overflow:hidden;
 }
-
 body{
   background:var(--bg);
   color:var(--text);
+  transition:.6s ease;
 }
-
-/* ===== AMBIENCE ===== */
 body::after{
   content:"";
   position:fixed;
@@ -66,64 +80,77 @@ body::after{
 /* ===== TEXT ===== */
 h1{
   font-family:Playfair Display,serif;
-  font-size:clamp(1.8rem,5vw,2.8rem);
+  font-size:clamp(1.7rem,5vw,2.6rem);
   font-weight:400;
 }
 p{
   margin-top:.6rem;
   color:var(--muted);
-  max-width:420px;
   text-align:center;
 }
 
-/* ===== MOOD ===== */
+/* ===== MOODS ===== */
 .moods{
   display:flex;
-  gap:1.5rem;
+  gap:1.8rem;
   margin-top:3rem;
 }
 .mood{
   width:160px;
   height:200px;
   border-radius:10px;
-  cursor:pointer;
-  background:linear-gradient(135deg,#1f1a10,#12121a);
+  background:linear-gradient(135deg,var(--bg2),#000);
   border:1px solid rgba(255,255,255,.08);
   display:flex;
   align-items:flex-end;
   justify-content:center;
   padding-bottom:1.2rem;
+  cursor:pointer;
   transition:.4s ease;
 }
 .mood:hover{
-  transform:translateY(-8px);
+  transform:translateY(-10px);
   border-color:var(--accent);
   box-shadow:0 20px 60px -20px var(--accentGlow);
 }
 .mood span{
-  letter-spacing:.15em;
   font-size:.75rem;
+  letter-spacing:.18em;
 }
 
 /* ===== UNLOCK ===== */
-.focus-ring{
-  width:180px;
-  height:180px;
+.unlock-wrap{
+  margin-top:3rem;
+  position:relative;
+  width:220px;
+  height:220px;
+}
+.target{
+  position:absolute;
+  inset:0;
   border-radius:50%;
-  border:2px solid var(--accent);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  box-shadow:0 0 40px var(--accentGlow);
-  animation:pulse 2.6s infinite;
-  cursor:pointer;
+  border:1px dashed rgba(255,255,255,.2);
 }
-@keyframes pulse{
-  50%{transform:scale(1.05)}
+.dot{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:transparent;
+  border:2px solid var(--text);
+  position:absolute;
+  top:20%;
+  left:20%;
+  cursor:grab;
 }
-.focus-ring span{
+.dot.aligned{
+  border-color:var(--accent);
+  box-shadow:0 0 30px var(--accentGlow);
+}
+.holdText{
+  margin-top:1.5rem;
+  font-size:.75rem;
+  letter-spacing:.12em;
   color:var(--muted);
-  font-size:.85rem;
 }
 
 /* ===== FORM ===== */
@@ -167,19 +194,23 @@ button{
 <!-- MOOD -->
 <div class="screen active" id="moodScreen">
   <h1>Choose Your Mood</h1>
-  <p>Select the tone of your edit</p>
+  <p>Select the tone of your project</p>
   <div class="moods">
-    <div class="mood" data-mood="Calm"><span>CALM</span></div>
-    <div class="mood" data-mood="Energetic"><span>ENERGETIC</span></div>
-    <div class="mood" data-mood="Cinematic"><span>CINEMATIC</span></div>
+    <div class="mood" data-mood="calm"><span>CALM</span></div>
+    <div class="mood" data-mood="energetic"><span>ENERGETIC</span></div>
+    <div class="mood" data-mood="cinematic"><span>CINEMATIC</span></div>
   </div>
 </div>
 
 <!-- UNLOCK -->
 <div class="screen" id="unlockScreen">
-  <h1>Align Focus</h1>
-  <p>Press and hold to continue</p>
-  <div class="focus-ring" id="holdRing"><span>Hold</span></div>
+  <h1>Focus to Unlock</h1>
+  <p>Drag to center and hold</p>
+  <div class="unlock-wrap" id="unlockArea">
+    <div class="target"></div>
+    <div class="dot" id="dot"></div>
+  </div>
+  <div class="holdText">Align & Hold</div>
 </div>
 
 <!-- FORM -->
@@ -188,15 +219,38 @@ button{
   <p>I’ll review this personally</p>
   <form id="projectForm">
     <input name="name" placeholder="Your name" required>
-    <input name="project" placeholder="Project type" required>
-    <input name="length" placeholder="Video length">
-    <input name="deadline" placeholder="Deadline">
-    <select name="budget">
-      <option value="">Prefer not to say</option>
-      <option>Under ₹200</option>
-      <option>₹200 – ₹500</option>
-      <option>₹500+</option>
+
+    <select name="projectType" required>
+      <option value="">Project Type</option>
+      <option>Music Video</option>
+      <option>Short Film</option>
+      <option>Commercial / Ad</option>
+      <option>Social Media</option>
+      <option>Other</option>
     </select>
+
+    <select name="length" required>
+      <option value="">Video Length</option>
+      <option>Under 1 minute</option>
+      <option>1 – 3 minutes</option>
+      <option>3 – 5 minutes</option>
+      <option>5+ minutes</option>
+    </select>
+
+    <select name="deadline" required>
+      <option value="">Deadline</option>
+      <option>Urgent</option>
+      <option>Standard</option>
+      <option>Flexible</option>
+    </select>
+
+    <select name="budget">
+      <option value="">Budget (optional)</option>
+      <option>Under ₹25,000</option>
+      <option>₹25,000 – ₹50,000</option>
+      <option>₹50,000+</option>
+    </select>
+
     <button type="submit">Send</button>
   </form>
 </div>
@@ -214,8 +268,7 @@ const screens={
   form:formScreen,
   loading:loadingScreen
 };
-
-let selectedMood="Calm", holdTimer;
+let mood="cinematic",holdTimer,isAligned=false;
 
 function show(s){
   Object.values(screens).forEach(x=>x.classList.remove("active"));
@@ -224,34 +277,48 @@ function show(s){
 
 document.querySelectorAll(".mood").forEach(m=>{
   m.onclick=()=>{
-    selectedMood=m.dataset.mood;
+    mood=m.dataset.mood;
+    document.body.className="theme-"+mood;
     show("unlock");
   };
 });
 
-holdRing.addEventListener("mousedown",startHold);
-holdRing.addEventListener("touchstart",startHold);
+const dot=document.getElementById("dot");
+const area=document.getElementById("unlockArea");
+let dragging=false;
 
-function startHold(){
-  holdTimer=setTimeout(()=>show("form"),850);
-}
-["mouseup","mouseleave","touchend"].forEach(e=>{
-  holdRing.addEventListener(e,()=>clearTimeout(holdTimer));
-});
+dot.onmousedown=e=>dragging=true;
+document.onmouseup=()=>{dragging=false;clearTimeout(holdTimer);}
+document.onmousemove=e=>{
+  if(!dragging)return;
+  const r=area.getBoundingClientRect();
+  let x=e.clientX-r.left-20;
+  let y=e.clientY-r.top-20;
+  x=Math.max(0,Math.min(180,x));
+  y=Math.max(0,Math.min(180,y));
+  dot.style.left=x+"px";
+  dot.style.top=y+"px";
+
+  const dx=x-90,dy=y-90;
+  isAligned=Math.sqrt(dx*dx+dy*dy)<12;
+  dot.classList.toggle("aligned",isAligned);
+
+  if(isAligned){
+    holdTimer=setTimeout(()=>show("form"),800);
+  }
+};
 
 projectForm.onsubmit=e=>{
   e.preventDefault();
   show("loading");
-
   const d=new FormData(projectForm);
   const msg=
 `Name: ${d.get("name")}
-Project: ${d.get("project")}
+Project: ${d.get("projectType")}
 Length: ${d.get("length")}
 Deadline: ${d.get("deadline")}
 Budget: ${d.get("budget")}
-Mood: ${selectedMood}`;
-
+Mood: ${mood}`;
   setTimeout(()=>{
     location.href=`mailto:kailarysathwik@gmail.com?subject=Project Request&body=${encodeURIComponent(msg)}`;
   },1200);
