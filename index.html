@@ -1381,6 +1381,12 @@
   </div>
 
   <script>
+    function haptic(pattern = [10]) {
+  if (navigator.vibrate) {
+    navigator.vibrate(pattern);
+  }
+}
+
     // State Management
     const state = {
       currentScreen: 'mood',
@@ -1523,11 +1529,14 @@
       });
     });
 
-    function selectMood(mood) {
-      state.selectedMood = mood;
-      applyTheme(mood);
-      showScreen('unlock');
-    }
+      function selectMood(mood) {
+  haptic([8]);
+  state.selectedMood = mood;
+  applyTheme(mood);
+  showScreen('unlock');
+}
+
+    
 
     // Focus dot interaction
     let containerRect;
@@ -1655,14 +1664,17 @@
     }
 
     function completeUnlock() {
-      clearInterval(holdInterval);
-      state.isUnlocked = true;
-      elements.focusDot.classList.add('locked');
+  clearInterval(holdInterval);
+  state.isUnlocked = true;
+  elements.focusDot.classList.add('locked');
 
-      setTimeout(() => {
-        showScreen('contact');
-      }, 600);
-    }
+  haptic([20, 30, 20]); // strong confirmation
+
+  setTimeout(() => {
+    showScreen('contact');
+  }, 600);
+}
+}
 
     // Back button
     elements.backButton.addEventListener('click', () => {
@@ -1777,9 +1789,10 @@
       }
     });
 
-    // Form submission
-    elements.projectForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+   elements.projectForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  haptic([15]); // submit tap feedback
 
       // Set the selected mood in the hidden field
       document.getElementById('selectedMoodInput').value = state.selectedMood || 'not selected';
