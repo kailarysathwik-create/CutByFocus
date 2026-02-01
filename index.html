@@ -8,55 +8,85 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+*,*::before,*::after{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
 /* ===== THEME VARIABLES ===== */
 :root{
---bg:#0a0a0f;
---bg-secondary:#12121a;
---accent:#d4af37;
---accent-glow:rgba(212,175,55,.35);
---text:#f5f0e6;
---text-muted:#9a9080;
---transition:.6s;
+  --bg:#0a0a0f;
+  --bg-secondary:#12121a;
+  --accent:#d4af37;
+  --accent-glow:rgba(212,175,55,.35);
+  --text:#f5f0e6;
+  --text-muted:#9a9080;
+  --transition:.6s;
 }
 
-html,body{height:100%;overflow:hidden}
+html,body{
+  height:100%;
+  overflow:hidden;
+}
+
 body{
-font-family:Inter,sans-serif;
-background:var(--bg);
-color:var(--text);
-transition:background var(--transition),color var(--transition);
+  font-family:Inter,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  transition:background var(--transition),color var(--transition);
 }
 
 /* ===== SCREENS ===== */
-.container{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
-.screen{
-position:absolute;
-inset:0;
-display:flex;
-align-items:center;
-justify-content:center;
-opacity:0;
-visibility:hidden;
-transition:.6s;
+.container{
+  position:relative;
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
-.screen.active{opacity:1;visibility:visible}
+
+.screen{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  visibility:hidden;
+  transition:.6s;
+}
+
+.screen.active{
+  opacity:1;
+  visibility:visible;
+}
 
 /* ===== LOADER ===== */
 .loader{
-width:48px;height:48px;
-border-radius:50%;
-border:2px solid rgba(255,255,255,.2);
-border-top-color:var(--accent);
-animation:spin 1s linear infinite;
-margin:auto;
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.2);
+  border-top-color:var(--accent);
+  animation:spin 1s linear infinite;
+  margin:auto;
 }
-@keyframes spin{to{transform:rotate(360deg)}}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
 
 /* ===== SIMPLE TEXT ===== */
-h1{font-family:Playfair Display,serif;font-weight:400}
-p{color:var(--text-muted)}
+h1{
+  font-family:Playfair Display,serif;
+  font-weight:400;
+}
+
+p{
+  color:var(--text-muted);
+}
 </style>
 </head>
 
@@ -64,77 +94,93 @@ p{color:var(--text-muted)}
 
 <div class="container">
 
-<!-- MOOD -->
-<div class="screen active" id="moodScreen">
-  <h1>Choose Your Mood</h1>
-</div>
-
-<!-- UNLOCK -->
-<div class="screen" id="unlockScreen">
-  <h1>Focus to Unlock</h1>
-</div>
-
-<!-- CONTACT -->
-<div class="screen" id="contactScreen">
-  <button id="startProjectBtn">Start a Project</button>
-</div>
-
-<!-- LOADING -->
-<div class="screen" id="loadingScreen">
-  <div style="text-align:center">
-    <div class="loader"></div>
-    <p id="loadingText" style="margin-top:1rem">Preparing your email…</p>
-    <p id="fallbackHint" style="margin-top:.6rem;font-size:.75rem;display:none">
-      If nothing opens, Gmail will open automatically.
-    </p>
+  <!-- MOOD SCREEN -->
+  <div class="screen active" id="moodScreen">
+    <h1>Choose Your Mood</h1>
   </div>
-</div>
+
+  <!-- UNLOCK SCREEN -->
+  <div class="screen" id="unlockScreen">
+    <h1>Focus to Unlock</h1>
+  </div>
+
+  <!-- CONTACT SCREEN -->
+  <div class="screen" id="contactScreen">
+    <button id="startProjectBtn">Start a Project</button>
+  </div>
+
+  <!-- LOADING SCREEN -->
+  <div class="screen" id="loadingScreen">
+    <div style="text-align:center">
+      <div class="loader"></div>
+      <p id="loadingText" style="margin-top:1rem">
+        Preparing your email…
+      </p>
+      <p id="fallbackHint"
+         style="margin-top:.6rem;font-size:.75rem;display:none">
+        If nothing opens, Gmail will open automatically.
+      </p>
+    </div>
+  </div>
 
 </div>
 
-<!-- MODAL -->
+<!-- PROJECT MODAL -->
 <div class="modal-overlay" id="projectModal" style="display:none">
-<form id="projectForm">
-<input name="name" placeholder="Name" required>
-<input name="projectType" placeholder="Project Type" required>
-<input name="videoLength" placeholder="Video Length" required>
-<input name="deadline" placeholder="Deadline" required>
-<input name="budget" placeholder="Budget">
-<button type="submit">Submit</button>
-</form>
+  <form id="projectForm">
+    <input name="name" placeholder="Name" required>
+    <input name="projectType" placeholder="Project Type" required>
+    <input name="videoLength" placeholder="Video Length" required>
+    <input name="deadline" placeholder="Deadline" required>
+    <input name="budget" placeholder="Budget">
+    <button type="submit">Submit</button>
+  </form>
 </div>
 
 <script>
-const state={selectedMood:"cinematic"};
-
-const elements={
-moodScreen:document.getElementById("moodScreen"),
-unlockScreen:document.getElementById("unlockScreen"),
-contactScreen:document.getElementById("contactScreen"),
-loadingScreen:document.getElementById("loadingScreen"),
-projectModal:document.getElementById("projectModal"),
-startProjectBtn:document.getElementById("startProjectBtn"),
-projectForm:document.getElementById("projectForm"),
-loadingText:document.getElementById("loadingText"),
-fallbackHint:document.getElementById("fallbackHint")
+/* ===== STATE ===== */
+const state = {
+  selectedMood: "cinematic"
 };
 
-function showScreen(s){
-Object.values(elements).forEach(e=>{
- if(e?.classList) e.classList.remove("active")
-});
-elements[s+"Screen"]?.classList.add("active");
+/* ===== ELEMENTS ===== */
+const elements = {
+  moodScreen: document.getElementById("moodScreen"),
+  unlockScreen: document.getElementById("unlockScreen"),
+  contactScreen: document.getElementById("contactScreen"),
+  loadingScreen: document.getElementById("loadingScreen"),
+  projectModal: document.getElementById("projectModal"),
+  startProjectBtn: document.getElementById("startProjectBtn"),
+  projectForm: document.getElementById("projectForm"),
+  loadingText: document.getElementById("loadingText"),
+  fallbackHint: document.getElementById("fallbackHint")
+};
+
+/* ===== SCREEN SWITCH ===== */
+function showScreen(name){
+  Object.values(elements).forEach(el=>{
+    if(el?.classList){
+      el.classList.remove("active");
+    }
+  });
+  const target = elements[name + "Screen"];
+  if(target){
+    target.classList.add("active");
+  }
 }
 
-elements.startProjectBtn.onclick=()=>{
-elements.projectModal.style.display="block";
+/* ===== MODAL OPEN ===== */
+elements.startProjectBtn.onclick = () => {
+  elements.projectModal.style.display = "block";
 };
 
-elements.projectForm.addEventListener("submit",e=>{
-e.preventDefault();
+/* ===== FORM SUBMIT ===== */
+elements.projectForm.addEventListener("submit", e => {
+  e.preventDefault();
 
-const d=new FormData(elements.projectForm);
-const msg=
+  const d = new FormData(elements.projectForm);
+
+  const msg =
 `Name: ${d.get("name")}
 Project: ${d.get("projectType")}
 Length: ${d.get("videoLength")}
@@ -142,26 +188,32 @@ Deadline: ${d.get("deadline")}
 Budget: ${d.get("budget")}
 Mood: ${state.selectedMood}`;
 
-elements.projectModal.style.display="none";
-showScreen("loading");
+  elements.projectModal.style.display = "none";
+  showScreen("loading");
 
-setTimeout(()=>{
-const subject=encodeURIComponent("Project Request");
-const body=encodeURIComponent(msg);
+  setTimeout(() => {
+    const subject = encodeURIComponent("Project Request");
+    const body = encodeURIComponent(msg);
 
-const mailto=`mailto:kailarysathwik@gmail.com?subject=${subject}&body=${body}`;
-const gmail=`https://mail.google.com/mail/?view=cm&fs=1&to=kailarysathwik@gmail.com&su=${subject}&body=${body}`;
+    const mailto =
+      `mailto:kailarysathwik@gmail.com?subject=${subject}&body=${body}`;
 
-const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const gmail =
+      `https://mail.google.com/mail/?view=cm&fs=1&to=kailarysathwik@gmail.com&su=${subject}&body=${body}`;
 
-if(isMobile){
-location.href=mailto;
-}else{
-elements.fallbackHint.style.display="block";
-location.href=mailto;
-setTimeout(()=>{location.href=gmail},800);
-}
-},1200);
+    const isMobile =
+      /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if(isMobile){
+      location.href = mailto;
+    }else{
+      elements.fallbackHint.style.display = "block";
+      location.href = mailto;
+      setTimeout(() => {
+        location.href = gmail;
+      }, 800);
+    }
+  }, 1200);
 });
 </script>
 
