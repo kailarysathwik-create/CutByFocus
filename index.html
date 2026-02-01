@@ -1,4 +1,3 @@
-!DOCTYPE 
 <html>
 <html lang="en">
 <head>
@@ -9,151 +8,55 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-/* Reset and Box Sizing */
-*,*::before,*::after{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
 /* ===== THEME VARIABLES ===== */
 :root{
-    --bg:#0a0a0f;
-    --bg-secondary:#12121a;
-    --accent:#d4af37;
-    --accent-glow:rgba(212,175,55,.35);
-    --text:#f5f0e6;
-    --text-muted:#9a9080;
-    --transition:.6s;
+--bg:#0a0a0f;
+--bg-secondary:#12121a;
+--accent:#d4af37;
+--accent-glow:rgba(212,175,55,.35);
+--text:#f5f0e6;
+--text-muted:#9a9080;
+--transition:.6s;
 }
 
-/* Base HTML and Body Styles */
-html,body{
-    height:100%;
-    overflow:hidden;
-}
-
+html,body{height:100%;overflow:hidden}
 body{
-    font-family:'Inter', sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    transition:background var(--transition), color var(--transition);
-    display:flex; /* Added for better centering, though container handles it */
-    align-items:center;
-    justify-content:center;
+font-family:Inter,sans-serif;
+background:var(--bg);
+color:var(--text);
+transition:background var(--transition),color var(--transition);
 }
 
-/* ===== SCREENS Layout ===== */
-.container{
-    position:relative;
-    width:100%;
-    height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
+/* ===== SCREENS ===== */
+.container{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
 .screen{
-    position:absolute;
-    inset:0; /* Shorthand for top, right, bottom, left: 0 */
-    display:flex;
-    flex-direction: column; /* Added for better content alignment */
-    align-items:center;
-    justify-content:center;
-    opacity:0;
-    visibility:hidden;
-    transition:opacity var(--transition), visibility var(--transition); /* Specific transitions */
+position:absolute;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+opacity:0;
+visibility:hidden;
+transition:.6s;
 }
+.screen.active{opacity:1;visibility:visible}
 
-.screen.active{
-    opacity:1;
-    visibility:visible;
-}
-
-/* ===== LOADER Styles ===== */
+/* ===== LOADER ===== */
 .loader{
-    width:48px;
-    height:48px;
-    border-radius:50%;
-    border:2px solid rgba(255,255,255,.2);
-    border-top-color:var(--accent);
-    animation:spin 1s linear infinite;
-    margin:auto;
+width:48px;height:48px;
+border-radius:50%;
+border:2px solid rgba(255,255,255,.2);
+border-top-color:var(--accent);
+animation:spin 1s linear infinite;
+margin:auto;
 }
+@keyframes spin{to{transform:rotate(360deg)}}
 
-@keyframes spin{
-    to{transform:rotate(360deg)}
-}
-
-/* ===== SIMPLE TEXT Styles ===== */
-h1{
-    font-family:'Playfair Display', serif;
-    font-weight:400;
-    margin-bottom: 1rem; /* Added spacing */
-}
-
-p{
-    color:var(--text-muted);
-}
-
-/* ===== MODAL Styles ===== */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    padding: 1rem;
-    box-sizing: border-box;
-}
-
-.modal-overlay form {
-    background: var(--bg-secondary);
-    padding: 2rem;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    max-width: 400px;
-    width: 100%;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-}
-
-.modal-overlay input {
-    padding: 0.8rem;
-    border: 1px solid var(--text-muted);
-    border-radius: 4px;
-    background: var(--bg);
-    color: var(--text);
-    font-size: 1rem;
-}
-
-.modal-overlay input::placeholder {
-    color: var(--text-muted);
-    opacity: 0.7;
-}
-
-.modal-overlay button[type="submit"] {
-    background: var(--accent);
-    color: var(--bg);
-    padding: 0.8rem 1.5rem;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.modal-overlay button[type="submit"]:hover {
-    background: darken(var(--accent), 10%); /* This won't work in plain CSS, but illustrates intent */
-    filter: brightness(0.9); /* A CSS alternative for hover effect */
-}
-
+/* ===== SIMPLE TEXT ===== */
+h1{font-family:Playfair Display,serif;font-weight:400}
+p{color:var(--text-muted)}
 </style>
 </head>
 
@@ -161,181 +64,106 @@ p{
 
 <div class="container">
 
-  <!-- MOOD SCREEN -->
-  <div class="screen active" id="moodScreen">
-    <h1>Choose Your Mood</h1>
-    <!-- Added a button to progress to the next screen -->
-    <button id="nextToUnlockBtn" style="
-        background: var(--accent);
-        color: var(--bg);
-        padding: 0.8rem 1.5rem;
-        border: none;
-        border-radius: 4px;
-        font-size: 1rem;
-        cursor: pointer;
-        margin-top: 1.5rem;
-        transition: background 0.3s ease;
-    ">Start Exploring</button>
-  </div>
+<!-- MOOD -->
+<div class="screen active" id="moodScreen">
+  <h1>Choose Your Mood</h1>
+</div>
 
-  <!-- UNLOCK SCREEN -->
-  <div class="screen" id="unlockScreen">
-    <h1>Focus to Unlock</h1>
-    <!-- Added a button to progress to the next screen -->
-    <button id="nextToContactBtn" style="
-        background: var(--accent);
-        color: var(--bg);
-        padding: 0.8rem 1.5rem;
-        border: none;
-        border-radius: 4px;
-        font-size: 1rem;
-        cursor: pointer;
-        margin-top: 1.5rem;
-        transition: background 0.3s ease;
-    ">Continue to Contact</button>
-  </div>
+<!-- UNLOCK -->
+<div class="screen" id="unlockScreen">
+  <h1>Focus to Unlock</h1>
+</div>
 
-  <!-- CONTACT SCREEN -->
-  <div class="screen" id="contactScreen">
-    <h1>Ready to collaborate?</h1> <!-- Added a heading for context -->
-    <button id="startProjectBtn" style="
-        background: var(--accent);
-        color: var(--bg);
-        padding: 0.8rem 1.5rem;
-        border: none;
-        border-radius: 4px;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: background 0.3s ease;
-    ">Start a Project</button>
-  </div>
+<!-- CONTACT -->
+<div class="screen" id="contactScreen">
+  <button id="startProjectBtn">Start a Project</button>
+</div>
 
-  <!-- LOADING SCREEN -->
-  <div class="screen" id="loadingScreen">
-    <div style="text-align:center">
-      <div class="loader"></div>
-      <p id="loadingText" style="margin-top:1rem">Preparing your email…</p>
-      <p id="fallbackHint" style="margin-top:.6rem;font-size:.75rem;display:none">
-        If nothing opens, Gmail will open automatically.
-      </p>
-    </div>
+<!-- LOADING -->
+<div class="screen" id="loadingScreen">
+  <div style="text-align:center">
+    <div class="loader"></div>
+    <p id="loadingText" style="margin-top:1rem">Preparing your email…</p>
+    <p id="fallbackHint" style="margin-top:.6rem;font-size:.75rem;display:none">
+      If nothing opens, Gmail will open automatically.
+    </p>
   </div>
+</div>
 
 </div>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="projectModal" style="display:none">
-  <form id="projectForm">
-    <h2>Project Inquiry</h2> <!-- Added a modal title -->
-    <input name="name" placeholder="Name" required>
-    <input name="projectType" placeholder="Project Type" required>
-    <input name="videoLength" placeholder="Video Length" required>
-    <input name="deadline" placeholder="Deadline" required>
-    <input name="budget" placeholder="Budget (optional)"> <!-- Clarified optional -->
-    <button type="submit">Submit Inquiry</button>
-  </form>
+<form id="projectForm">
+<input name="name" placeholder="Name" required>
+<input name="projectType" placeholder="Project Type" required>
+<input name="videoLength" placeholder="Video Length" required>
+<input name="deadline" placeholder="Deadline" required>
+<input name="budget" placeholder="Budget">
+<button type="submit">Submit</button>
+</form>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => { // Ensure DOM is fully loaded
+const state={selectedMood:"cinematic"};
 
-  const state = {
-    selectedMood: "cinematic"
-  };
+const elements={
+moodScreen:document.getElementById("moodScreen"),
+unlockScreen:document.getElementById("unlockScreen"),
+contactScreen:document.getElementById("contactScreen"),
+loadingScreen:document.getElementById("loadingScreen"),
+projectModal:document.getElementById("projectModal"),
+startProjectBtn:document.getElementById("startProjectBtn"),
+projectForm:document.getElementById("projectForm"),
+loadingText:document.getElementById("loadingText"),
+fallbackHint:document.getElementById("fallbackHint")
+};
 
-  // Centralized references to all significant DOM elements
-  const elements = {
-    moodScreen: document.getElementById("moodScreen"),
-    unlockScreen: document.getElementById("unlockScreen"),
-    contactScreen: document.getElementById("contactScreen"),
-    loadingScreen: document.getElementById("loadingScreen"),
-    projectModal: document.getElementById("projectModal"),
-    startProjectBtn: document.getElementById("startProjectBtn"),
-    projectForm: document.getElementById("projectForm"),
-    loadingText: document.getElementById("loadingText"),
-    fallbackHint: document.getElementById("fallbackHint"),
-    nextToUnlockBtn: document.getElementById("nextToUnlockBtn"), // New button
-    nextToContactBtn: document.getElementById("nextToContactBtn") // New button
-  };
+function showScreen(s){
+Object.values(elements).forEach(e=>{
+ if(e?.classList) e.classList.remove("active")
+});
+elements[s+"Screen"]?.classList.add("active");
+}
 
-  // Function to show a specific screen and hide others
-  function showScreen(screenName) {
-    Object.values(elements).forEach(element => {
-      // Only screens have classList property and are intended to be hidden/shown
-      if (element && element.classList && element.id && element.id.endsWith('Screen')) {
-        element.classList.remove("active");
-      }
-    });
-    const targetScreen = elements[screenName + "Screen"];
-    if (targetScreen) {
-      targetScreen.classList.add("active");
-    }
-  }
+elements.startProjectBtn.onclick=()=>{
+elements.projectModal.style.display="block";
+};
 
-  // Event Listeners
-  // Added listeners for navigating through screens
-  elements.nextToUnlockBtn?.addEventListener('click', () => {
-    showScreen("unlock");
-  });
+elements.projectForm.addEventListener("submit",e=>{
+e.preventDefault();
 
-  elements.nextToContactBtn?.addEventListener('click', () => {
-    showScreen("contact");
-  });
+const d=new FormData(elements.projectForm);
+const msg=
+`Name: ${d.get("name")}
+Project: ${d.get("projectType")}
+Length: ${d.get("videoLength")}
+Deadline: ${d.get("deadline")}
+Budget: ${d.get("budget")}
+Mood: ${state.selectedMood}`;
 
-  elements.startProjectBtn?.addEventListener('click', () => {
-    elements.projectModal.style.display = "flex"; // Changed to flex for modal centering
-  });
+elements.projectModal.style.display="none";
+showScreen("loading");
 
-  elements.projectForm?.addEventListener("submit", (e) => {
-    e.preventDefault();
+setTimeout(()=>{
+const subject=encodeURIComponent("Project Request");
+const body=encodeURIComponent(msg);
 
-    const formData = new FormData(elements.projectForm);
-    const messageBody = `
-Name: ${formData.get("name")}
-Project: ${formData.get("projectType")}
-Length: ${formData.get("videoLength")}
-Deadline: ${formData.get("deadline")}
-Budget: ${formData.get("budget") || 'Not specified'}
-Mood: ${state.selectedMood}
-    `.trim(); // Trim to remove leading/trailing whitespace from template literal
+const mailto=`mailto:kailarysathwik@gmail.com?subject=${subject}&body=${body}`;
+const gmail=`https://mail.google.com/mail/?view=cm&fs=1&to=kailarysathwik@gmail.com&su=${subject}&body=${body}`;
 
-    elements.projectModal.style.display = "none";
-    showScreen("loading");
+const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    setTimeout(() => {
-      const subject = encodeURIComponent("Project Inquiry: " + (formData.get("projectType") || "New Project"));
-      const body = encodeURIComponent(messageBody);
-
-      const mailtoLink = `mailto:kailarysathwik@gmail.com?subject=${subject}&body=${body}`;
-      const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=kailarysathwik@gmail.com&su=${subject}&body=${body}`;
-
-      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-      if (isMobile) {
-        window.location.href = mailtoLink;
-      } else {
-        elements.fallbackHint.style.display = "block";
-        window.location.href = mailtoLink; // Attempt mailto first
-        // Provide a slight delay before trying Gmail as a fallback
-        setTimeout(() => {
-          // Only redirect to Gmail if the mailto didn't successfully open an app
-          // This is a heuristic and not guaranteed to work perfectly cross-browser
-          window.location.href = gmailLink;
-        }, 800);
-      }
-    }, 1200);
-  });
-
-  // Optional: Click outside modal to close
-  elements.projectModal?.addEventListener('click', (e) => {
-    if (e.target === elements.projectModal) { // Check if clicked directly on overlay, not content
-      elements.projectModal.style.display = 'none';
-    }
-  });
-
+if(isMobile){
+location.href=mailto;
+}else{
+elements.fallbackHint.style.display="block";
+location.href=mailto;
+setTimeout(()=>{location.href=gmail},800);
+}
+},1200);
 });
 </script>
 
 </body>
 </html>
-
