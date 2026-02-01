@@ -7,19 +7,41 @@
 
 <style>
 :root{
-  --bg:#0b0b0b;
-  --fg:#ffffff;
-  --muted:rgba(255,255,255,.55);
+  --bg-dark:#050505;
+  --bg-mid:#0e0e0e;
   --accent:#ffb454;
+  --text:#ffffff;
+  --muted:rgba(255,255,255,.55);
 }
 
-*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,sans-serif}
+/* RESET */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+}
 
+/* BODY – ROYAL CINEMATIC BACKGROUND */
 body{
-  background:radial-gradient(circle at top,#141414,#000);
-  color:var(--fg);
   height:100vh;
   overflow:hidden;
+  color:var(--text);
+  background:
+    radial-gradient(1200px 700px at 15% -10%, rgba(255,180,80,.18), transparent 60%),
+    radial-gradient(900px 600px at 85% 25%, rgba(120,160,255,.12), transparent 65%),
+    linear-gradient(180deg, var(--bg-mid), var(--bg-dark));
+}
+
+/* FILM GRAIN */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:url("https://grainy-gradients.vercel.app/noise.svg");
+  opacity:.045;
+  pointer-events:none;
+  z-index:0;
 }
 
 /* SCREENS */
@@ -35,6 +57,7 @@ body{
   opacity:0;
   pointer-events:none;
   transition:opacity .6s ease;
+  z-index:1;
 }
 .screen.active{
   opacity:1;
@@ -43,104 +66,112 @@ body{
 
 /* TEXT */
 h1{
-  font-size:clamp(1.8rem,5vw,2.6rem);
+  font-size:clamp(1.9rem,5vw,2.7rem);
   font-weight:500;
-  letter-spacing:.5px;
+  letter-spacing:.45px;
+  text-shadow:0 3px 15px rgba(0,0,0,.55);
 }
 p{
+  margin-top:.6rem;
   color:var(--muted);
-  margin-top:.5rem;
   max-width:420px;
-  line-height:1.5;
+  line-height:1.55;
 }
 
-/* MOODS */
+/* MOOD BUTTONS */
 .moods{
   display:flex;
-  gap:1rem;
-  margin-top:2.5rem;
+  gap:1.1rem;
+  margin-top:2.6rem;
   flex-wrap:wrap;
   justify-content:center;
 }
 .mood-btn{
-  padding:.75rem 1.6rem;
-  border:1px solid rgba(255,255,255,.2);
-  background:transparent;
-  color:var(--fg);
+  padding:.9rem 2rem;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.3);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.03));
+  backdrop-filter:blur(8px);
+  color:var(--text);
   cursor:pointer;
+  box-shadow:
+    0 14px 40px rgba(0,0,0,.45),
+    inset 0 1px 0 rgba(255,255,255,.18);
   transition:.35s ease;
 }
 .mood-btn:hover{
-  background:var(--accent);
-  color:#000;
+  transform:translateY(-3px);
+  box-shadow:
+    0 22px 60px rgba(0,0,0,.65),
+    inset 0 1px 0 rgba(255,255,255,.28);
 }
 
 /* UNLOCK */
 .focus-ring{
-  width:170px;
-  height:170px;
+  width:190px;
+  height:190px;
+  margin-top:2.8rem;
   border-radius:50%;
-  border:2px solid var(--accent);
+  border:1px solid rgba(255,180,80,.75);
   display:flex;
   align-items:center;
   justify-content:center;
-  margin-top:2.5rem;
-  animation:pulse 2.5s infinite;
+  box-shadow:
+    0 0 60px rgba(255,180,80,.45),
+    inset 0 0 35px rgba(255,180,80,.22);
+  animation:pulse 2.8s ease-in-out infinite;
 }
 @keyframes pulse{
   0%,100%{transform:scale(1)}
-  50%{transform:scale(1.04)}
+  50%{transform:scale(1.045)}
 }
 .focus-ring span{
-  font-size:.8rem;
+  font-size:.85rem;
   color:var(--muted);
 }
 
 /* FORM */
 form{
-  margin-top:2rem;
+  margin-top:2.2rem;
   width:100%;
   max-width:420px;
 }
 input,select,button{
   width:100%;
-  padding:.8rem;
-  margin-bottom:.8rem;
-  background:#151515;
-  border:1px solid rgba(255,255,255,.2);
-  color:var(--fg);
+  padding:.85rem;
+  margin-bottom:.85rem;
+  background:rgba(18,18,18,.7);
+  backdrop-filter:blur(10px);
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.25);
+  color:var(--text);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.1),
+    0 12px 30px rgba(0,0,0,.45);
 }
 button{
-  background:var(--accent);
+  border-radius:999px;
+  background:linear-gradient(180deg,var(--accent),#ffd9a0);
   color:#000;
+  font-weight:500;
+  letter-spacing:.35px;
   cursor:pointer;
+  box-shadow:
+    0 18px 45px rgba(0,0,0,.55),
+    inset 0 1px 0 rgba(255,255,255,.28);
 }
 
 /* LOADING */
 .loader{
-  width:60px;
-  height:60px;
+  width:64px;
+  height:64px;
   border-radius:50%;
-  border:2px solid rgba(255,255,255,.15);
+  border:2px solid rgba(255,255,255,.18);
   border-top-color:var(--accent);
   animation:spin 1s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* EMAIL FALLBACK */
-.copy-box{
-  margin-top:1.5rem;
-  font-size:.85rem;
-  color:var(--muted);
-}
-.copy-btn{
-  margin-top:.6rem;
-  padding:.5rem 1.2rem;
-  border:1px solid rgba(255,255,255,.2);
-  background:transparent;
-  color:var(--fg);
-  cursor:pointer;
-}
 
 /* MOBILE */
 @media(max-width:480px){
@@ -153,52 +184,47 @@ button{
 
 <!-- MOOD -->
 <div class="screen active" id="mood">
-<h1>Choose the mood</h1>
-<p>This defines the tone of the work.</p>
-<div class="moods">
-  <button class="mood-btn" data-mood="Calm">Calm</button>
-  <button class="mood-btn" data-mood="Energetic">Energetic</button>
-  <button class="mood-btn" data-mood="Cinematic">Cinematic</button>
-</div>
+  <h1>Choose the mood</h1>
+  <p>This defines the tone of the edit.</p>
+  <div class="moods">
+    <button class="mood-btn" data-mood="Calm">Calm</button>
+    <button class="mood-btn" data-mood="Energetic">Energetic</button>
+    <button class="mood-btn" data-mood="Cinematic">Cinematic</button>
+  </div>
 </div>
 
 <!-- UNLOCK -->
 <div class="screen" id="unlock">
-<h1>Align focus</h1>
-<p>Press and hold to continue</p>
-<div class="focus-ring" id="ring"><span>Hold</span></div>
+  <h1>Align focus</h1>
+  <p>Press and hold to continue</p>
+  <div class="focus-ring" id="ring"><span>Hold</span></div>
 </div>
 
 <!-- FORM -->
 <div class="screen" id="form">
-<h1>Project details</h1>
-<p>I’ll review this personally.</p>
+  <h1>Project details</h1>
+  <p>I’ll review this personally.</p>
 
-<form id="projectForm">
-<input name="name" placeholder="Your name" required>
-<input name="project" placeholder="Project type" required>
-<input name="length" placeholder="Video length">
-<input name="deadline" placeholder="Deadline">
-<select name="budget">
-<option value="">Prefer not to say</option>
-<option>Discuss with editor</option>
-<option>Under ₹200</option>
-<option>₹200 – ₹500</option>
-<option>₹500+</option>
-</select>
-<button type="submit">Send</button>
-</form>
-
-<div class="copy-box" id="fallback" style="display:none">
-<p>Email app didn’t open? Copy and send manually.</p>
-<button class="copy-btn" id="copyBtn">Copy message</button>
-</div>
+  <form id="projectForm">
+    <input name="name" placeholder="Your name" required>
+    <input name="project" placeholder="Project type" required>
+    <input name="length" placeholder="Video length">
+    <input name="deadline" placeholder="Deadline">
+    <select name="budget">
+      <option value="">Prefer not to say</option>
+      <option>Discuss with editor</option>
+      <option>Under ₹200</option>
+      <option>₹200 – ₹500</option>
+      <option>₹500+</option>
+    </select>
+    <button type="submit">Send</button>
+  </form>
 </div>
 
 <!-- LOADING -->
 <div class="screen" id="loading">
-<div class="loader"></div>
-<p style="margin-top:1rem">Preparing message…</p>
+  <div class="loader"></div>
+  <p style="margin-top:1rem">Preparing message…</p>
 </div>
 
 <script>
@@ -209,27 +235,35 @@ function show(s){
   Object.values(screens).forEach(x=>x.classList.remove('active'));
   screens[s].classList.add('active');
 }
-function vibrate(p){navigator.vibrate&&navigator.vibrate(p)}
+
+function vibrate(p){navigator.vibrate&&navigator.vibrate(p);}
 
 document.querySelectorAll('.mood-btn').forEach(b=>{
-  b.onclick=()=>{
+  b.addEventListener('click',()=>{
     selectedMood=b.dataset.mood;
     vibrate([10]);
     show('unlock');
-  }
+  });
 });
 
-ring.onmousedown=ring.ontouchstart=()=>{
+ring.addEventListener('mousedown',startHold);
+ring.addEventListener('touchstart',startHold);
+
+function startHold(){
   vibrate([10]);
   hold=setTimeout(()=>{
     vibrate([20,30,20]);
     show('form');
-  },800);
-};
-ring.onmouseup=ring.onmouseleave=ring.ontouchend=()=>clearTimeout(hold);
+  },850);
+}
 
-projectForm.onsubmit=e=>{
+['mouseup','mouseleave','touchend'].forEach(e=>{
+  ring.addEventListener(e,()=>clearTimeout(hold));
+});
+
+projectForm.addEventListener('submit',e=>{
   e.preventDefault();
+  vibrate([15]);
   show('loading');
 
   const d=new FormData(projectForm);
@@ -241,19 +275,10 @@ Budget: ${d.get('budget')}
 Mood: ${selectedMood}`;
 
   setTimeout(()=>{
-    const mail=`mailto:kailarysathwik@gmail.com?subject=Project Request&body=${encodeURIComponent(msg)}`;
-    window.location.href=mail;
-
-    // Fallback for PC
-    setTimeout(()=>{
-      document.getElementById('fallback').style.display='block';
-      document.getElementById('copyBtn').onclick=()=>{
-        navigator.clipboard.writeText(msg);
-        alert('Message copied');
-      };
-    },800);
-  },1000);
-};
+    window.location.href=
+      `mailto:kailarysathwik@gmail.com?subject=Project Request&body=${encodeURIComponent(msg)}`;
+  },1200);
+});
 </script>
 
 </body>
