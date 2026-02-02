@@ -1229,10 +1229,9 @@
           <p>A few quick details to get started. Pricing will be confirmed after reviewing your project.</p>
         </div>
 
-        <form class="project-form" id="projectForm" name="project-details" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-          <input type="hidden" name="form-name" value="project-details">
-          <input type="hidden" name="selected-mood" id="selectedMoodInput" value="">
-          <p hidden><label>Don't fill this out: <input name="bot-field"></label></p>
+       <form class="project-form" id="projectForm">
+  <input type="hidden" id="selectedMoodInput" value="">
+
           <div class="form-group">
             <label for="clientName">Your Name</label>
             <input type="text" id="clientName" name="name" placeholder="Enter your name" required>
@@ -1310,6 +1309,30 @@
     </div>
   </div>
 <script>
+/* ===== MOOD SELECTION FIX ===== */
+document.querySelectorAll('.mood-option').forEach(option => {
+  option.addEventListener('click', () => {
+    const mood = option.dataset.mood;
+
+    // set mood
+    state.selectedMood = mood;
+
+    // apply theme
+    document.body.className = `theme-${mood}`;
+
+    // go to unlock screen
+    elements.moodScreen.classList.remove('active');
+    elements.unlockScreen.classList.add('active');
+
+    // show back button + mood indicator if needed
+    document.getElementById('moodIndicator').classList.add('visible');
+    document.getElementById('moodIndicatorText').textContent =
+      mood.charAt(0).toUpperCase() + mood.slice(1);
+  });
+});
+</script>
+
+  <script>
 /* ================= STATE ================= */
 const state = {
   currentScreen: 'mood',
@@ -1405,3 +1428,4 @@ Mood: ${state.selectedMood}
 
 </body>
 </html>
+
