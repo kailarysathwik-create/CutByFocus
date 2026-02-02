@@ -213,6 +213,14 @@
       transition: opacity calc(var(--transition-speed) * 0.8) ease, visibility calc(var(--transition-speed) * 0.8) ease;
     }
 
+    /* Contact screen scroll + top alignment fix */
+.contact-screen {
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow-y: auto;
+  padding-top: 6rem;
+}
+
     .screen.active {
       opacity: 1;
       visibility: visible;
@@ -1515,6 +1523,7 @@ function unlockComplete() {
 
 </body>
 </html>
+
 
 
 
