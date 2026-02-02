@@ -1425,7 +1425,84 @@ Mood: ${state.selectedMood}
   }, 1200);
 });
 </script>
+  <script>
+/* ===== FOCUS RING UNLOCK LOGIC ===== */
+const focusDot = document.getElementById("focusDot");
+const focusContainer = document.getElementById("focusRingContainer");
+const progressFill = document.getElementById("progressFill");
+
+let dragging = false;
+let progress = 0;
+let holdInterval = null;
+
+focusDot.addEventListener("pointerdown", e => {
+  dragging = true;
+  focusDot.setPointerCapture(e.pointerId);
+});
+
+window.addEventListener("pointermove", e => {
+  if (!dragging) return;
+
+  const rect = focusContainer.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  focusDot.style.left = `${x}px`;
+  focusDot.style.top = `${y}px`;
+  focusDot.style.transform = "translate(-50%, -50%)";
+
+  const cx = rect.width / 2;
+  const cy = rect.height / 2;
+
+  const dist = Math.hypot(x - cx, y - cy);
+
+  if (dist < 10) {
+    focusDot.classList.add("aligned");
+    startHold();
+  } else {
+    focusDot.classList.remove("aligned");
+    resetHold();
+  }
+});
+
+window.addEventListener("pointerup", () => {
+  dragging = false;
+  resetHold();
+});
+
+function startHold() {
+  if (holdInterval) return;
+
+  holdInterval = setInterval(() => {
+    progress += 4;
+    progressFill.style.strokeDashoffset = 220 - (220 * progress) / 100;
+
+    if (progress >= 100) {
+      clearInterval(holdInterval);
+      focusDot.classList.add("locked");
+      unlockComplete();
+    }
+  }, 30);
+}
+
+function resetHold() {
+  clearInterval(holdInterval);
+  holdInterval = null;
+  progress = 0;
+  progressFill.style.strokeDashoffset = 220;
+}
+
+function unlockComplete() {
+  setTimeout(() => {
+    elements.unlockScreen.classList.remove("active");
+    elements.contactScreen.classList.add("active");
+    document.getElementById("contactContent").classList.add("visible");
+  }, 400);
+}
+</script>
+
 
 </body>
 </html>
+
 
