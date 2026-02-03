@@ -1,1608 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cut by Focus | Freelance Video Editor</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cut by Focus | Freelance Video Editor</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
 
-  <style>
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
-    :root {
-      /* Calm Theme */
-      --calm-bg: #0a1628;
-      --calm-bg-secondary: #0f1f35;
-      --calm-accent: #4a9eff;
-      --calm-accent-glow: rgba(74, 158, 255, 0.3);
-      --calm-text: #e8f0ff;
-      --calm-text-muted: #7a9bc8;
+:root{
+  --calm-bg:#0a1628; --calm-accent:#4a9eff; --calm-glow:rgba(74,158,255,.35);
+  --energetic-bg:#1a0a0a; --energetic-accent:#ff4a4a; --energetic-glow:rgba(255,74,74,.45);
+  --cinematic-bg:#0a0a0f; --cinematic-accent:#d4af37; --cinematic-glow:rgba(212,175,55,.45);
 
-      /* Energetic Theme */
-      --energetic-bg: #1a0a0a;
-      --energetic-bg-secondary: #2a1010;
-      --energetic-accent: #ff4a4a;
-      --energetic-accent-glow: rgba(255, 74, 74, 0.4);
-      --energetic-text: #fff0f0;
-      --energetic-text-muted: #c88a8a;
+  --bg:var(--calm-bg);
+  --accent:var(--calm-accent);
+  --accent-glow:var(--calm-glow);
+  --text:#f5f5f5;
+  --text-muted:#9aa3b2;
 
-      /* Cinematic Theme */
-      --cinematic-bg: #0a0a0f;
-      --cinematic-bg-secondary: #12121a;
-      --cinematic-accent: #d4af37;
-      --cinematic-accent-glow: rgba(212, 175, 55, 0.35);
-      --cinematic-text: #f5f0e6;
-      --cinematic-text-muted: #9a9080;
-
-      /* Active Theme (defaults to calm) */
-      --bg: var(--calm-bg);
-      --bg-secondary: var(--calm-bg-secondary);
-      --accent: var(--calm-accent);
-      --accent-glow: var(--calm-accent-glow);
-      --text: var(--calm-text);
-      --text-muted: var(--calm-text-muted);
-
-      /* Animation speeds */
-      --transition-speed: 0.8s;
-      --animation-speed: 1;
-    }
-
-    html, body {
-  height: 100%;
-  overflow-x: hidden;
+  --t:.8s;
 }
 
-
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
-    }
-
-    /* Ambient Effects Container */
-    .ambient-effects {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-/* Smooth ambient transitions */
-.ambient-effects * {
-  transition: opacity 1.2s cubic-bezier(.4,0,.2,1),
-              transform 1.2s cubic-bezier(.4,0,.2,1);
+html,body{height:100%;overflow-x:hidden}
+body{
+  font-family:Inter,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  transition:background var(--t);
 }
 
-    /* Film Grain Overlay */
-    .grain {
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-      opacity:0;
-      animation: grain-shift 0.5s steps(10) infinite;
-      transition: opacity var(--transition-speed) ease;
-    }
-
-    .grain.active {
-      opacity: 0.03;
-    }
-
-    @keyframes grain-shift {
-      0%, 100% { transform: translate(0, 0); }
-      25% { transform: translate(-5%, -5%); }
-      50% { transform: translate(5%, 5%); }
-      75% { transform: translate(-5%, 5%); }
-    }
-
-    /* Ambient Glow */
-    .ambient-glow {
-      position: absolute;
-      width: 60vw;
-      height: 60vw;
-      border-radius: 50%;
-      background: var(--accent-glow);
-      filter: blur(120px);
-      opacity: 0;
-      transition: opacity var(--transition-speed) ease, background var(--transition-speed) ease;
-    }
-
-    .ambient-glow.active {
-      opacity: 0.5;
-    }
-
-    .ambient-glow.glow-1 {
-      top: -20%;
-      left: -20%;
-      animation: float-1 calc(20s / var(--animation-speed)) ease-in-out infinite;
-    }
-
-    .ambient-glow.glow-2 {
-      bottom: -30%;
-      right: -20%;
-      animation: float-2 calc(25s / var(--animation-speed)) ease-in-out infinite;
-    }
-
-    @keyframes float-1 {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(10%, 10%) scale(1.1); }
-    }
-
-    @keyframes float-2 {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(-10%, -5%) scale(1.05); }
-    }
-
-    /* Soft Particles */
-    .particles {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      transition: opacity var(--transition-speed) ease;
-    }
-
-    .particles.active {
-      opacity: 1;
-    }
-
-    .particle {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: var(--accent);
-      border-radius: 50%;
-      opacity: 0.3;
-    }
-
-    /* Video Container (for future video backgrounds) */
-    .video-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      opacity: 0;
-      transition: opacity 1s ease;
-    }
-
-    .video-container.active {
-      opacity: 0.15;
-    }
-
-    .video-container video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* Main Container */
-    .container {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1;
-    }
-
-    /* Screen Base Styles */
-/* ===== SCREEN SYSTEM (FINAL, STABLE) ===== */
-/* ===== SCREEN SYSTEM (FINAL, STABLE) ===== */
-.screen {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity calc(var(--transition-speed) * 0.8) ease, visibility calc(var(--transition-speed) * 0.8) ease;
-    }
-
-    /* Contact screen scroll + top alignment fix */
-.contact-screen {
-  align-items: flex-start;
-  justify-content: flex-start;
-  overflow-y: auto;
-  padding-top: 6rem;
+/* ---------- SCREEN SYSTEM ---------- */
+.container{position:relative;width:100%;height:100%}
+.screen{
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; visibility:hidden;
+  transition:opacity .6s ease;
 }
-
-    .screen.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    /* ========== MOOD SELECTION SCREEN ========== */
-    .mood-screen {
-      flex-direction: column;
-      gap: 4rem;
-    }
-
-    .mood-title {
-      text-align: center;
-    }
-
-    .mood-title h1 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(1.5rem, 4vw, 2.5rem);
-      font-weight: 400;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.75rem;
-      opacity: 0.9;
-    }
-
-    .mood-title p {
-      font-size: clamp(0.85rem, 2vw, 1rem);
-      color: var(--text-muted);
-      font-weight: 300;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    .mood-options {
-      display: flex;
-      gap: 3rem;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 0 2rem;
-    }
-
-    .mood-option {
-      position: relative;
-      width: 160px;
-      height: 200px;
-      background: var(--bg-secondary);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.4s ease;
-      overflow: hidden;
-    }
-
-    .mood-option::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.4));
-      z-index: 1;
-    }
-
-    .mood-option:hover {
-      transform: translateY(-8px);
-      border-color: var(--accent);
-      box-shadow: 0 20px 60px -20px var(--accent-glow);
-    }
-
-    .mood-option:hover .mood-preview {
-      transform: scale(1.05);
-    }
-
-    .mood-preview {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      transition: transform 0.6s ease;
-    }
-
-    .mood-preview.calm {
-      background: linear-gradient(135deg, #0a1628 0%, #1a3a5c 50%, #0f1f35 100%);
-    }
-
-    .mood-preview.energetic {
-      background: linear-gradient(135deg, #1a0a0a 0%, #4a1515 50%, #2a1010 100%);
-    }
-
-    .mood-preview.cinematic {
-      background: linear-gradient(135deg, #0a0a0f 0%, #1f1a10 50%, #12121a 100%);
-    }
-
-    .mood-label {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      padding: 1.25rem;
-      z-index: 2;
-      text-align: center;
-    }
-
-    .mood-label span {
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: #fff;
-    }
-
-    .mood-option[data-mood="calm"]:hover {
-      border-color: var(--calm-accent);
-      box-shadow: 0 20px 60px -20px var(--calm-accent-glow);
-    }
-
-    .mood-option[data-mood="energetic"]:hover {
-      border-color: var(--energetic-accent);
-      box-shadow: 0 20px 60px -20px var(--energetic-accent-glow);
-    }
-
-    .mood-option[data-mood="cinematic"]:hover {
-      border-color: var(--cinematic-accent);
-      box-shadow: 0 20px 60px -20px var(--cinematic-accent-glow);
-    }
-
-    /* ========== UNLOCK SCREEN ========== */
-    .unlock-screen {
-      flex-direction: column;
-      gap: 3rem;
-    }
-
-    .unlock-instruction {
-      text-align: center;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fade-in-up 0.8s ease forwards;
-      animation-delay: 0.3s;
-    }
-
-    .unlock-instruction h2 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(1.2rem, 3vw, 1.8rem);
-      font-weight: 400;
-      margin-bottom: 0.5rem;
-    }
-
-    .unlock-instruction p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      letter-spacing: 0.05em;
-    }
-
-    @keyframes fade-in-up {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Focus Ring Unlock */
-    .focus-ring-container {
-      position: relative;
-      width: 200px;
-      height: 200px;
-      opacity: 0;
-      transform: scale(0.9);
-      animation: fade-in-scale 0.6s ease forwards;
-      animation-delay: 0.5s;
-    }
-
-    @keyframes fade-in-scale {
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    .focus-ring-outer {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 180px;
-      height: 180px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    .focus-ring-middle {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 120px;
-      height: 120px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    .focus-ring-inner {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 60px;
-      height: 60px;
-      border: 2px solid var(--accent);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      transition: all 0.3s ease;
-      box-shadow: 0 0 20px var(--accent-glow);
-    }
-
-    .focus-target {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 24px;
-      height: 24px;
-      transform: translate(-50%, -50%);
-    }
-
-    .focus-target::before,
-    .focus-target::after {
-      content: '';
-      position: absolute;
-      background: var(--accent);
-    }
-
-    .focus-target::before {
-      top: 50%;
-      left: 0;
-      width: 100%;
-      height: 1px;
-      transform: translateY(-50%);
-    }
-
-    .focus-target::after {
-      left: 50%;
-      top: 0;
-      width: 1px;
-      height: 100%;
-      transform: translateX(-50%);
-    }
-
-    .focus-dot {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 50px;
-      height: 50px;
-      border: 2px solid var(--text);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      cursor: pointer;
-      transition: all 0.15s ease;
-      opacity: 0.6;
-    }
-
-    .focus-dot.aligned {
-      border-color: var(--accent);
-      opacity: 1;
-      box-shadow: 0 0 30px var(--accent-glow);
-    }
-
-    .focus-dot.locked {
-      animation: lock-pulse 0.5s ease;
-    }
-
-    @keyframes lock-pulse {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); }
-      50% { transform: translate(-50%, -50%) scale(1.2); }
-    }
-
-    .progress-ring {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 80px;
-      height: 80px;
-      transform: translate(-50%, -50%);
-    }
-
-    .progress-ring circle {
-      fill: none;
-      stroke-width: 2;
-      transform-origin: center;
-      transform: rotate(-90deg);
-    }
-
-    .progress-ring .progress-bg {
-      stroke: rgba(255, 255, 255, 0.1);
-    }
-
-    .progress-ring .progress-fill {
-      stroke: var(--accent);
-      stroke-dasharray: 220;
-      stroke-dashoffset: 220;
-      transition: stroke-dashoffset 0.1s linear;
-    }
-
-    .unlock-hint {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      opacity: 0;
-      animation: fade-in-up 0.6s ease forwards;
-      animation-delay: 0.8s;
-    }
-
-    /* ========== CONTACT SCREEN ========== */
-  /* ===== CONTACT SCREEN (FINAL FIX) ===== */
-.contact-screen {
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;   /* IMPORTANT */
-  overflow-y: auto;
-  padding-top: 6rem;
-  padding-bottom: 6rem;
-}
-
-
-    .contact-content {
-      max-width: 600px;
-      width: 100%;
-      text-align: center;
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    /* 🔒 HARD FAILSAFE — NEVER ALLOW INVISIBLE CONTACT UI */
-.contact-screen.active .contact-content {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-
-    .contact-content.visible {
-      animation: reveal-content 1s ease forwards;
-    }
-
-    @keyframes reveal-content {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .contact-header {
-      margin-bottom: 3rem;
-    }
-
-    .contact-header h1 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(1.8rem, 5vw, 3rem);
-      font-weight: 400;
-      margin-bottom: 0.5rem;
-      letter-spacing: 0.02em;
-    }
-
-    .contact-header p {
-      font-size: 1rem;
-      color: var(--text-muted);
-      font-weight: 300;
-    }
-
-    .contact-methods {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-bottom: 3rem;
-    }
-
-    .contact-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      padding: 1rem 2rem;
-      background: var(--bg-secondary);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 6px;
-      color: var(--text);
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 400;
-      letter-spacing: 0.02em;
-      transition: all 0.3s ease;
-    }
-
-    .contact-link:hover {
-      border-color: var(--accent);
-      background: rgba(255, 255, 255, 0.02);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 40px -15px var(--accent-glow);
-    }
-
-    .contact-link svg {
-      width: 18px;
-      height: 18px;
-      opacity: 0.8;
-    }
-
-    .workflow-section {
-      padding: 2rem;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
-    }
-
-    .workflow-section h3 {
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.25rem;
-    }
-
-    .workflow-list {
-      list-style: none;
-      display: grid;
-      gap: 0.75rem;
-      text-align: left;
-    }
-
-    .workflow-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    .workflow-list li::before {
-      content: '';
-      flex-shrink: 0;
-      width: 4px;
-      height: 4px;
-      background: var(--accent);
-      border-radius: 50%;
-      margin-top: 0.5rem;
-    }
-
-    .start-project-btn {
-      margin-top: 2rem;
-      margin-bottom: 3rem;
-      padding: 1rem 2.5rem;
-      background: transparent;
-      border: 1px solid var(--accent);
-      border-radius: 6px;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 0.85rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .start-project-btn:hover {
-      background: var(--accent);
-      color: var(--bg);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px -10px var(--accent-glow);
-    }
-
-    .start-project-btn:active {
-      transform: translateY(0);
-    }
-
-    /* Mood Indicator */
-    .mood-indicator {
-      position: fixed;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      opacity: 0;
-      transition: opacity 0.5s ease;
-      z-index: 10;
-    }
-
-    .mood-indicator.visible {
-      opacity: 0.5;
-    }
-
-    .mood-indicator-dot {
-      width: 6px;
-      height: 6px;
-      background: var(--accent);
-      border-radius: 50%;
-    }
-
-    /* Back Button */
-    .back-button {
-      position: fixed;
-      top: 2rem;
-      left: 2rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1rem;
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      cursor: pointer;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-      z-index: 100;
-    }
-
-    .back-button.visible {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .back-button:hover {
-      border-color: var(--accent);
-      color: var(--text);
-    }
-
-    .back-button svg {
-      width: 14px;
-      height: 14px;
-    }
-
-    /* Theme-specific Adjustments */
-    body.theme-calm {
-      --bg: var(--calm-bg);
-      --bg-secondary: var(--calm-bg-secondary);
-      --accent: var(--calm-accent);
-      --accent-glow: var(--calm-accent-glow);
-      --text: var(--calm-text);
-      --text-muted: var(--calm-text-muted);
-      --animation-speed: 0.8;
-    }
-
-    body.theme-energetic {
-      --bg: var(--energetic-bg);
-      --bg-secondary: var(--energetic-bg-secondary);
-      --accent: var(--energetic-accent);
-      --accent-glow: var(--energetic-accent-glow);
-      --text: var(--energetic-text);
-      --text-muted: var(--energetic-text-muted);
-      --animation-speed: 1.5;
-    }
-
-    body.theme-cinematic {
-      --bg: var(--cinematic-bg);
-      --bg-secondary: var(--cinematic-bg-secondary);
-      --accent: var(--cinematic-accent);
-      --accent-glow: var(--cinematic-accent-glow);
-      --text: var(--cinematic-text);
-      --text-muted: var(--cinematic-text-muted);
-      --animation-speed: 0.6;
-    }
-
-    body.theme-energetic .grain.active {
-      opacity: 0.02;
-      animation-duration: 0.3s;
-    }
-
-    body.theme-cinematic .grain.active {
-      opacity: 0.05;
-    }
-
-    body.theme-cinematic .ambient-glow {
-      filter: blur(150px);
-    }
-
-    /* ========== PROJECT DETAILS MODAL ========== */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
-    }
-
-    .modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .project-modal {
-      position: relative;
-      width: 90%;
-      max-width: 480px;
-      max-height: 90vh;
-      background: var(--bg-secondary);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 2.5rem;
-      overflow-y: auto;
-      transform: scale(0.95) translateY(20px);
-      transition: transform 0.4s ease;
-    }
-
-    .modal-overlay.active .project-modal {
-      transform: scale(1) translateY(0);
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      width: 32px;
-      height: 32px;
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-      color: var(--text-muted);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-    }
-
-    .modal-close:hover {
-      border-color: var(--accent);
-      color: var(--text);
-    }
-
-    .modal-close svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    .modal-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .modal-header h2 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.5rem;
-      font-weight: 400;
-      margin-bottom: 0.5rem;
-    }
-
-    .modal-header p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    .project-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .form-group label {
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-
-    .form-group input,
-    .form-group select {
-      padding: 0.875rem 1rem;
-      background: var(--bg);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 6px;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 0.9rem;
-      transition: all 0.3s ease;
-      -webkit-appearance: none;
-      appearance: none;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 2px var(--accent-glow);
-    }
-
-    .form-group input::placeholder {
-      color: var(--text-muted);
-      opacity: 0.6;
-    }
-
-    .form-group select {
-      cursor: pointer;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239a9080' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      padding-right: 2.5rem;
-    }
-
-    .form-group select option {
-      background: var(--bg-secondary);
-      color: var(--text);
-    }
-
-    .form-note {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.5rem;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-style: italic;
-    }
-
-    .form-note span {
-      opacity: 0.7;
-    }
-
-    .modal-terms {
-      margin-top: 1rem;
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 6px;
-    }
-
-    .modal-terms ul {
-      list-style: none;
-      display: grid;
-      gap: 0.5rem;
-    }
-
-    .modal-terms li {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.5rem;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-
-    .modal-terms li::before {
-      content: '';
-      flex-shrink: 0;
-      width: 3px;
-      height: 3px;
-      background: var(--accent);
-      border-radius: 50%;
-      margin-top: 0.4rem;
-    }
-
-    .submit-btn {
-      margin-top: 0.5rem;
-      padding: 1rem 2rem;
-      background: var(--accent);
-      border: none;
-      border-radius: 6px;
-      color: var(--bg);
-      font-family: inherit;
-      font-size: 0.85rem;
-      font-weight: 500;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px -10px var(--accent-glow);
-    }
-
-    .submit-btn:active {
-      transform: translateY(0);
-    }
-
-    /* Success state for modal */
-    .modal-success {
-      display: none;
-      text-align: center;
-      padding: 2rem 0;
-    }
-
-    .modal-success.visible {
-      display: block;
-    }
-
-    .modal-success svg {
-      width: 48px;
-      height: 48px;
-      color: var(--accent);
-      margin-bottom: 1rem;
-    }
-
-    .modal-success h3 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.3rem;
-      font-weight: 400;
-      margin-bottom: 0.5rem;
-    }
-
-    .modal-success p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .mood-options {
-        gap: 1.5rem;
-      }
-
-      .mood-option {
-        width: 130px;
-        height: 160px;
-      }
-
-      .contact-content {
-        padding: 1rem;
-      }
-
-      .workflow-section {
-        padding: 1.5rem;
-      }
-
-      .project-modal {
-        padding: 2rem 1.5rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .mood-options {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .mood-option {
-        width: 100%;
-        max-width: 200px;
-        height: 120px;
-      }
-
-      .contact-methods {
-        gap: 0.75rem;
-      }
-
-      .contact-link {
-        padding: 0.875rem 1.5rem;
-        font-size: 0.9rem;
-      }
-
-      .project-modal {
-        padding: 1.5rem;
-        max-height: 85vh;
-      }
-
-      .modal-header {
-        margin-bottom: 1.5rem;
-      }
-
-      .modal-header h2 {
-        font-size: 1.25rem;
-      }
-    }
- /* ===== CAR DRIFT RING ===== */
-.car-ring{
-  position:relative;
-  width:200px;
-  height:200px;
-  border-radius:50%;
+.screen.active{opacity:1;visibility:visible}
+
+/* ---------- MOOD SCREEN ---------- */
+.mood-screen{flex-direction:column;gap:3rem}
+.mood-options{display:flex;gap:2rem}
+.mood-option{
+  width:160px;height:200px;
+  background:#111;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:10px;
+  display:flex;align-items:flex-end;justify-content:center;
   cursor:pointer;
-  transform-origin: 50% 50%;
-}
-
-.ring-track{
-  position:absolute;
-  inset:0;
-  border-radius:50%;
-  border:1px solid rgba(255,255,255,0.15);
-}
-
-.ring-track::after{
-  content:'';
-  position:absolute;
-  inset:30px;
-  border-radius:50%;
-  border:1px solid rgba(255,255,255,0.1);
-}
-
-.car{
-  position:absolute;
-  top:50%;
-  left:50%;
-  font-size:22px;
-
-  transform: rotate(0deg) translateY(-100px);
-  transform-origin: center;
-
-  filter: drop-shadow(0 0 10px var(--accent-glow));
-  pointer-events: none;
-}
-    .car.drift {
-  animation: car-orbit 1.4s cubic-bezier(.22,.61,.36,1) forwards;
-}
-
-@keyframes car-orbit {
-  0%   { transform: rotate(0deg) translateY(-100px); }
-  70%  { transform: rotate(420deg) translateY(-100px); }
-  100% { transform: rotate(360deg) translateY(-100px); }
-}
-
-
-.ring-text{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:.75rem;
-  letter-spacing:.3em;
-  color:var(--text-muted);
   transition:.4s;
 }
-
-
-.car-ring.drift .ring-text{
-  opacity:0;
+.mood-option:hover{transform:translateY(-8px)}
+.mood-option span{
+  padding:1rem;
+  letter-spacing:.2em;
+  font-size:.75rem;
+  text-transform:uppercase;
 }
 
-@keyframes car-drift{
-  0%{transform:rotate(0deg)}
-  65%{transform:rotate(430deg)}
-  100%{transform:rotate(360deg)}
+/* ---------- CONTACT SCREEN ---------- */
+.contact-screen{
+  align-items:flex-start;
+  overflow-y:auto;
+  padding:6rem 1rem;
+}
+.contact-content{
+  max-width:600px;
+  margin:auto;
+  text-align:center;
+}
+.contact-header h1{
+  font-family:Playfair Display,serif;
+  font-weight:400;
+  font-size:clamp(2rem,5vw,3rem);
+}
+.contact-header p{color:var(--text-muted);margin-top:.5rem}
+
+.contact-link{
+  display:flex;justify-content:center;gap:.6rem;
+  margin:1rem 0;
+  padding:1rem;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:6px;
+  text-decoration:none;color:var(--text);
+}
+.contact-link:hover{
+  border-color:var(--accent);
+  box-shadow:0 0 30px var(--accent-glow);
 }
 
- .car-ring,
-.screen,
-.ambient-glow {
-  will-change: transform, opacity;
+.start-project-btn{
+  margin-top:2rem;
+  padding:1rem 2.5rem;
+  background:none;
+  border:1px solid var(--accent);
+  color:var(--text);
+  cursor:pointer;
+}
+.start-project-btn:hover{
+  background:var(--accent);
+  color:#000;
 }
 
-  </style>
+/* ---------- MOOD THEMES ---------- */
+body.theme-calm{--bg:var(--calm-bg);--accent:var(--calm-accent);--accent-glow:var(--calm-glow)}
+body.theme-energetic{--bg:var(--energetic-bg);--accent:var(--energetic-accent);--accent-glow:var(--energetic-glow)}
+body.theme-cinematic{--bg:var(--cinematic-bg);--accent:var(--cinematic-accent);--accent-glow:var(--cinematic-glow)}
+
+/* ---------- TRANSITION OVERLAY ---------- */
+.mood-transition{
+  position:fixed;inset:0;pointer-events:none;z-index:999;opacity:0;
+}
+
+/* Calm */
+.mood-transition.calm{
+  background:radial-gradient(circle,rgba(255,255,255,.08),transparent 70%);
+  animation:fade 1.2s forwards;
+}
+
+/* Energetic */
+.mood-transition.energetic{
+  background:linear-gradient(135deg,rgba(255,74,74,.45),rgba(0,0,0,.9));
+  animation:flash .7s forwards;
+}
+
+/* Cinematic */
+.mood-transition.cinematic{
+  background:linear-gradient(to bottom,rgba(212,175,55,.5),rgba(10,10,15,.95));
+  animation:drop 1.4s forwards;
+}
+
+@keyframes fade{to{opacity:1}}
+@keyframes flash{
+  0%{opacity:0}40%{opacity:1}100%{opacity:.9}
+}
+@keyframes drop{
+  from{opacity:0;transform:translateY(-100%)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+body.theme-cinematic .contact-content{
+  animation:rise 1.2s ease forwards;
+}
+@keyframes rise{
+  from{opacity:0;transform:translateY(40px)}
+  to{opacity:1;transform:translateY(0)}
+}
+</style>
 </head>
+
 <body>
-  <!-- Ambient Effects Layer -->
-  <div class="ambient-effects">
-    <div class="grain"></div>
-    <div class="ambient-glow glow-1"></div>
-    <div class="ambient-glow glow-2"></div>
-    <div class="particles"></div>
-  </div>
 
-  <!-- Video Background Container (for future use) -->
-  <div class="video-container" id="videoContainer">
-    <!-- Videos will be dynamically inserted here based on mood -->
-    <!-- Example: <video src="videos/calm-bg.mp4" autoplay loop muted playsinline></video> -->
-  </div>
+<div class="container">
 
-  <!-- Back Button -->
-  <button class="back-button" id="backButton" aria-label="Go back">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M19 12H5M12 19l-7-7 7-7"/>
-    </svg>
-    <span>Back</span>
-  </button>
-
-  <!-- Main Container -->
-  <div class="container">
-    <!-- Mood Selection Screen -->
-    <div class="screen mood-screen active" id="moodScreen">
-      <div class="mood-title">
-        <h1>Choose Your Mood</h1>
-        <p>Select the tone that fits your project</p>
-      </div>
-
-      <div class="mood-options">
-        <div class="mood-option" data-mood="calm" role="button" tabindex="0" aria-label="Select calm mood">
-          <div class="mood-preview calm"></div>
-          <div class="mood-label">
-            <span>Calm</span>
-          </div>
-        </div>
-
-        <div class="mood-option" data-mood="energetic" role="button" tabindex="0" aria-label="Select energetic mood">
-          <div class="mood-preview energetic"></div>
-          <div class="mood-label">
-            <span>Energetic</span>
-          </div>
-        </div>
-
-        <div class="mood-option" data-mood="cinematic" role="button" tabindex="0" aria-label="Select cinematic mood">
-          <div class="mood-preview cinematic"></div>
-          <div class="mood-label">
-            <span>Cinematic</span>
-          </div>
-        </div>
-      </div>
+  <!-- MOOD SCREEN -->
+  <div class="screen mood-screen active" id="moodScreen">
+    <h1>Choose Your Mood</h1>
+    <div class="mood-options">
+      <div class="mood-option" data-mood="calm"><span>Calm</span></div>
+      <div class="mood-option" data-mood="energetic"><span>Energetic</span></div>
+      <div class="mood-option" data-mood="cinematic"><span>Cinematic</span></div>
     </div>
+  </div>
 
-    <!-- Unlock Screen -->
-    <div class="screen unlock-screen" id="unlockScreen">
-      <div class="unlock-instruction">
-        <h2>Focus to Unlock</h2>
-        <p>Drag the ring to align with the center, then hold</p>
+  <!-- CONTACT SCREEN -->
+  <div class="screen contact-screen" id="contactScreen">
+    <div class="contact-content">
+      <div class="contact-header">
+        <h1>Let's Create Together</h1>
+        <p>Ready to bring your vision to life</p>
       </div>
 
-      <div class="car-ring" id="carRing">
-  <div class="ring-track"></div>
+      <a class="contact-link" href="mailto:kailarysathwik@gmail.com">
+        kailarysathwik@gmail.com
+      </a>
 
-  <div class="car" id="carIcon">🚗</div>
+      <a class="contact-link" target="_blank" href="https://instagram.com/sathwik_29dx">
+        @sathwik_29dx
+      </a>
 
-  <div class="ring-text" id="ringText">TAP</div>
+      <button class="start-project-btn">Start a Project</button>
+    </div>
+  </div>
+
 </div>
 
+<div id="transition" class="mood-transition"></div>
 
-
-    <!-- Contact Screen -->
-    <div class="screen contact-screen" id="contactScreen">
-      <div class="contact-content" id="contactContent">
-        <div class="contact-header">
-          <h1>Let's Create Together</h1>
-          <p>Ready to bring your vision to life</p>
-        </div>
-
-        <div class="contact-methods">
-          <a href="mailto:kailarysathwik@gmail.com" class="contact-link">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="2" y="4" width="20" height="16" rx="2"/>
-              <path d="m22 6-10 7L2 6"/>
-            </svg>
-            kailarysathwik@gmail.com
-          </a>
-
-          <a href="https://instagram.com/sathwik_29dx" target="_blank" rel="noopener noreferrer" class="contact-link">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="2" y="2" width="20" height="20" rx="5"/>
-              <circle cx="12" cy="12" r="4"/>
-              <circle cx="18" cy="6" r="1" fill="currentColor"/>
-            </svg>
-            @sathwik_29dx
-          </a>
-        </div>
-
-        <div class="workflow-section">
-          <h3>How It Works</h3>
-          <ul class="workflow-list">
-            <li>Pricing is confirmed after reviewing your project details</li>
-            <li>A minimum advance is required to begin work</li>
-            <li>You'll receive a preview before final delivery</li>
-            <li>Full-quality video is delivered after complete payment</li>
-          </ul>
-        </div>
-
-        <button class="start-project-btn" id="startProjectBtn">Start a Project</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Mood Indicator -->
-  <div class="mood-indicator" id="moodIndicator">
-    <span class="mood-indicator-dot"></span>
-    <span id="moodIndicatorText">Calm</span>
-  </div>
-
-  <!-- Project Details Modal -->
-  <div class="modal-overlay" id="projectModal">
-    <div class="project-modal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
-      <button class="modal-close" id="modalClose" aria-label="Close modal">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 6L6 18M6 6l12 12"/>
-        </svg>
-      </button>
-
-      <div id="modalFormContent">
-        <div class="modal-header">
-          <h2 id="modalTitle">Share Your Project</h2>
-          <p>A few quick details to get started. Pricing will be confirmed after reviewing your project.</p>
-        </div>
-
-       <form class="project-form" id="projectForm">
-  <input type="hidden" id="selectedMoodInput" value="">
-
-          <div class="form-group">
-            <label for="clientName">Your Name</label>
-            <input type="text" id="clientName" name="name" placeholder="Enter your name" required>
-          </div>
-
-          <div class="form-group">
-            <label for="projectType">Project Type</label>
-            <select id="projectType" name="projectType" required>
-              <option value="" disabled selected>Select project type</option>
-              <option value="music-video">Music Video</option>
-              <option value="short-film">Short Film</option>
-              <option value="commercial">Commercial / Ad</option>
-              <option value="social-media">Social Media Content</option>
-              <option value="documentary">Documentary</option>
-              <option value="event">Event Highlight</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="videoLength">Approximate Video Length</label>
-            <select id="videoLength" name="videoLength" required>
-              <option value="" disabled selected>Select duration</option>
-              <option value="under-1">Under 1 minute</option>
-              <option value="1-3">1 - 3 minutes</option>
-              <option value="3-5">3 - 5 minutes</option>
-              <option value="5-10">5 - 10 minutes</option>
-              <option value="10-plus">10+ minutes</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="deadline">Deadline</label>
-            <select id="deadline" name="deadline" required>
-              <option value="" disabled selected>Select timeline</option>
-              <option value="urgent">Urgent (within 1 week)</option>
-              <option value="standard">Standard (2 - 3 weeks)</option>
-              <option value="relaxed">Relaxed (1 month+)</option>
-              <option value="flexible">Flexible / No rush</option>
-            </select>
-          </div>
-
-         <div class="form-group">
-  <label for="budget">
-    Budget Range <span class="form-note"><span>(optional)</span></span>
-  </label>
-
-  <select id="budget" name="budget">
-    <option value="" selected>Prefer not to say</option>
-    <option value="2k-4k">₹2,000 – ₹4,000</option>
-    <option value="4k-6k">₹4,000 – ₹6,000</option>
-    <option value="6k-8k">₹6,000 – ₹8,000</option>
-    <option value="8k-10k">₹8,000 – ₹10,000</option>
-    <option value="discuss">Discuss with editor</option>
-  </select>
-</div>
-
-          <div class="modal-terms">
-            <ul>
-              <li>Pricing confirmed after reviewing project details</li>
-              <li>Minimum advance required to start work</li>
-              <li>Preview shared before final delivery</li>
-              <li>Full-quality output delivered after full payment</li>
-            </ul>
-          </div>
-
-          <button type="submit" class="submit-btn">Submit Details</button>
-        </form>
-      </div>
-
-      <div class="modal-success" id="modalSuccess">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M8 12l3 3 5-6"/>
-        </svg>
-        <h3>Details Sent</h3>
-        <p>Your project details have been received. The editor will review your submission and respond to you personally.</p>
-      </div>
-    </div>
-  </div>
 <script>
-/* ===== MOOD SELECTION FIX ===== */
-document.querySelectorAll('.mood-option').forEach(option => {
-  option.addEventListener('click', () => {
-    const mood = option.dataset.mood;
+const moodScreen=document.getElementById("moodScreen");
+const contactScreen=document.getElementById("contactScreen");
+const overlay=document.getElementById("transition");
 
-    // set mood
-    state.selectedMood = mood;
+document.querySelectorAll(".mood-option").forEach(opt=>{
+  opt.onclick=()=>{
+    const mood=opt.dataset.mood;
 
-    // apply theme
-   document.body.classList.remove(
-  "theme-calm",
-  "theme-energetic",
-  "theme-cinematic"
-);
-document.body.classList.add(`theme-${mood}`);
+    document.body.className=`theme-${mood}`;
+    overlay.className=`mood-transition ${mood}`;
+    overlay.style.opacity="1";
 
+    moodScreen.classList.remove("active");
 
-    // go to unlock screen
-    elements.moodScreen.classList.remove('active');
-    elements.unlockScreen.classList.add('active');
-
-    // show back button + mood indicator if needed
-    document.getElementById('moodIndicator').classList.add('visible');
-    document.getElementById('moodIndicatorText').textContent =
-      mood.charAt(0).toUpperCase() + mood.slice(1);
-  });
+    setTimeout(()=>{
+      contactScreen.classList.add("active");
+      overlay.style.opacity="0";
+    }, mood==="energetic"?600:900);
+  };
 });
 </script>
 
-  <script>
-/* ================= STATE ================= */
-const state = {
-  currentScreen: 'mood',
-  selectedMood: null
-};
-
-/* ================= ELEMENTS ================= */
-const elements = {
-  moodScreen: document.getElementById('moodScreen'),
-  unlockScreen: document.getElementById('unlockScreen'),
-  contactScreen: document.getElementById('contactScreen'),
-  projectModal: document.getElementById('projectModal'),
-  modalClose: document.getElementById('modalClose'),
-  startProjectBtn: document.getElementById('startProjectBtn'),
-  projectForm: document.getElementById('projectForm'),
-  modalFormContent: document.getElementById('modalFormContent'),
-  modalSuccess: document.getElementById('modalSuccess'),
-  selectedMoodInput: document.getElementById('selectedMoodInput')
-};
-
-/* ================= SCREENS ================= */
-function showScreen(name) {
-  elements.moodScreen.classList.remove('active');
-  elements.unlockScreen.classList.remove('active');
-  elements.contactScreen.classList.remove('active');
-
-  if (name === 'mood') elements.moodScreen.classList.add('active');
-  if (name === 'unlock') elements.unlockScreen.classList.add('active');
-  if (name === 'contact') elements.contactScreen.classList.add('active');
-
-  state.currentScreen = name;
-}
-
-/* ================= MODAL ================= */
-elements.startProjectBtn.addEventListener('click', () => {
-  elements.projectModal.classList.add('active');
-  document.body.style.overflow = 'hidden';
-});
-
-elements.modalClose.addEventListener('click', closeModal);
-elements.projectModal.addEventListener('click', e => {
-  if (e.target === elements.projectModal) closeModal();
-});
-
-function closeModal() {
-  elements.projectModal.classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-/* ================= FORM SUBMIT (MAIL ONLY) ================= */
-elements.projectForm.addEventListener('submit', e => {
-  e.preventDefault();
-
-  elements.selectedMoodInput.value = state.selectedMood || 'Not selected';
-
-  const d = new FormData(elements.projectForm);
-
-  const message = `
-Name: ${d.get('name')}
-Project Type: ${d.get('projectType')}
-Video Length: ${d.get('videoLength')}
-Deadline: ${d.get('deadline')}
-Budget: ${d.get('budget')}
-Mood: ${state.selectedMood}
-  `.trim();
-
-  const subject = encodeURIComponent('New Project Request');
-  const body = encodeURIComponent(message);
-
-  const mailto =
-    `mailto:kailarysathwik@gmail.com?subject=${subject}&body=${body}`;
-
-  const gmail =
-    `https://mail.google.com/mail/?view=cm&fs=1&to=kailarysathwik@gmail.com&su=${subject}&body=${body}`;
-
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-  elements.modalFormContent.style.display = 'none';
-  elements.modalSuccess.classList.add('visible');
-
-  setTimeout(() => {
-    closeModal();
-
-    if (isMobile) {
-      window.location.href = mailto;
-    } else {
-      window.location.href = mailto;
-      setTimeout(() => window.open(gmail, '_blank'), 1000);
-    }
-  }, 1200);
-});
-</script>
-<script>
-/* ===== CAR DRIFT UNLOCK LOGIC (FINAL, FIXED) ===== */
-const carRing = document.getElementById("carRing");
-const carIcon = document.getElementById("carIcon");
-const ringText = document.getElementById("ringText");
-const contactContent = document.getElementById("contactContent");
-
-function randomCarStart() {
-  const angle = Math.random() * 360;
-  carIcon.style.transform = `rotate(${angle}deg) translateY(-100px)`;
-}
-randomCarStart();
-
-let unlocked = false;
-
-carRing.addEventListener("click", () => {
-  if (unlocked) return;
-  unlocked = true;
-
-  // hide tap text
-  ringText.style.opacity = "0";
-
-  // start car drift
-  carIcon.classList.add("drift");
-
-  // wait for car animation
-  setTimeout(() => {
-
-    // hide unlock screen
-    elements.unlockScreen.classList.remove("active");
-
-    // show contact screen
-    setTimeout(() => {
-      elements.contactScreen.classList.add("active");
-
-      // reveal contact content
-      setTimeout(() => {
-        contactContent.classList.add("visible");
-      }, 400);
-
-    }, 200);
-
-  }, 1400);
-});
-</script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
