@@ -1501,7 +1501,7 @@ Mood: ${state.selectedMood}
   }, 1200);
 });
 </script>
-  <script>
+ <script>
 /* ===== CAR DRIFT UNLOCK LOGIC ===== */
 const carRing = document.getElementById("carRing");
 const carIcon = document.getElementById("carIcon");
@@ -1517,21 +1517,21 @@ randomCarStart();
 carRing.addEventListener("click", () => {
   carRing.classList.add("drift");
 
-setTimeout(() => {
-  elements.unlockScreen.classList.remove("active");
-elements.contactScreen.classList.add("active");
+  setTimeout(() => {
+    elements.unlockScreen.classList.remove("active");
+    elements.contactScreen.classList.add("active");
 
-
-  document
-    .getElementById("contactContent")
-    .classList.add("visible");
-}, 100);
-
+    setTimeout(() => {
+      document
+        .getElementById("contactContent")
+        .classList.add("visible");
+    }, 100);
+  }, 1200); // matches drift animation
+});
 </script>
-
-
 </body>
 </html>
+
 
 
 
