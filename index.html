@@ -1388,7 +1388,13 @@ document.querySelectorAll('.mood-option').forEach(option => {
     state.selectedMood = mood;
 
     // apply theme
-    document.body.className = `theme-${mood}`;
+   document.body.classList.remove(
+  "theme-calm",
+  "theme-energetic",
+  "theme-cinematic"
+);
+document.body.classList.add(`theme-${mood}`);
+
 
     // go to unlock screen
     elements.moodScreen.classList.remove('active');
@@ -1511,17 +1517,22 @@ randomCarStart();
 carRing.addEventListener("click", () => {
   carRing.classList.add("drift");
 
-  setTimeout(() => {
-    elements.unlockScreen.classList.remove("active");
-    elements.contactScreen.classList.add("active");
-    document.getElementById("contactContent").classList.add("visible");
-  }, 1400);
-});
+setTimeout(() => {
+  elements.unlockScreen.classList.remove("active");
+elements.contactScreen.classList.add("active");
+
+
+  document
+    .getElementById("contactContent")
+    .classList.add("visible");
+}, 100);
+
 </script>
 
 
 </body>
 </html>
+
 
 
 
