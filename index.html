@@ -201,32 +201,36 @@
     }
 
     /* Screen Base Styles */
- .screen {
-  position: absolute;
-  inset: 0;               /* 🔴 THIS IS THE FIX */
+/* ===== SCREEN SYSTEM (FINAL, STABLE) ===== */
+.screen {
+  position: fixed;
+  inset: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   opacity: 0;
   visibility: hidden;
-  transition: opacity calc(var(--transition-speed) * 0.8) ease,
-              visibility calc(var(--transition-speed) * 0.8) ease;
+  pointer-events: none;
+  z-index: 1;
+
+  transition: opacity 0.6s ease, visibility 0.6s ease;
 }
-
-
 
 .screen.active {
   opacity: 1;
   visibility: visible;
-  pointer-events: auto; /* 🔴 IMPORTANT */
+  pointer-events: auto;
+  z-index: 5;
 }
 
-    /* Contact screen scroll + top alignment fix */
+/* Contact screen layout */
 .contact-screen {
   align-items: flex-start;
   justify-content: flex-start;
   overflow-y: auto;
-  padding-top: 6rem;
+  padding: 6rem 1rem;
 }
 
     .screen.active {
@@ -1572,6 +1576,7 @@ carRing.addEventListener("click", () => {
 </script>
 </body>
 </html>
+
 
 
 
