@@ -201,23 +201,27 @@
     }
 
     /* Screen Base Styles */
-  .screen {
+ .screen {
   position: absolute;
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+
   opacity: 0;
   visibility: hidden;
+  pointer-events: none; /* 🔴 IMPORTANT */
+
   transition: opacity 0.9s cubic-bezier(.4,0,.2,1),
               visibility 0.9s;
 }
 
+
 .screen.active {
   opacity: 1;
   visibility: visible;
-  pointer-events: auto;
+  pointer-events: auto; /* 🔴 IMPORTANT */
 }
 
     /* Contact screen scroll + top alignment fix */
@@ -554,8 +558,11 @@
       max-width: 600px;
       width: 100%;
       text-align: center;
-      opacity: 100;
+      opacity:0;
       transform: translateY(30px);
+    }
+.contact-content.visible {
+      animation: reveal-content 1s ease forwards;
     }
 
    
@@ -1134,13 +1141,26 @@
 
 .car{
   position:absolute;
-  top:-12px;
+  top:50%;
   left:50%;
-  transform: translateX(-50%);
-  transform-origin: 50% 112px;
   font-size:22px;
-  filter:drop-shadow(0 0 10px var(--accent-glow));
+
+  transform: rotate(0deg) translateY(-100px);
+  transform-origin: center;
+
+  filter: drop-shadow(0 0 10px var(--accent-glow));
+  pointer-events: none;
 }
+    .car.drift {
+  animation: car-orbit 1.4s cubic-bezier(.22,.61,.36,1) forwards;
+}
+
+@keyframes car-orbit {
+  0%   { transform: rotate(0deg) translateY(-100px); }
+  70%  { transform: rotate(420deg) translateY(-100px); }
+  100% { transform: rotate(360deg) translateY(-100px); }
+}
+
 
 .ring-text{
   position:absolute;
@@ -1536,7 +1556,7 @@ carRing.addEventListener("click", () => {
   unlocked = true;
 
   ringText.style.opacity = "0";
-  carRing.classList.add("drift");
+  carIcon.classList.add("drift");
 
   setTimeout(() => {
     elements.unlockScreen.classList.remove("active");
