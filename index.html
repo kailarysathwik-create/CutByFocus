@@ -341,191 +341,6 @@
       box-shadow: 0 20px 60px -20px var(--cinematic-accent-glow);
     }
 
-    /* ========== UNLOCK SCREEN ========== */
-    .unlock-screen {
-      flex-direction: column;
-      gap: 3rem;
-    }
-
-    .unlock-instruction {
-      text-align: center;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fade-in-up 0.8s ease forwards;
-      animation-delay: 0.3s;
-    }
-
-    .unlock-instruction h2 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(1.2rem, 3vw, 1.8rem);
-      font-weight: 400;
-      margin-bottom: 0.5rem;
-    }
-
-    .unlock-instruction p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      letter-spacing: 0.05em;
-    }
-
-    @keyframes fade-in-up {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Focus Ring Unlock */
-    .focus-ring-container {
-      position: relative;
-      width: 200px;
-      height: 200px;
-      opacity: 0;
-      transform: scale(0.9);
-      animation: fade-in-scale 0.6s ease forwards;
-      animation-delay: 0.5s;
-    }
-
-    @keyframes fade-in-scale {
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    .focus-ring-outer {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 180px;
-      height: 180px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    .focus-ring-middle {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 120px;
-      height: 120px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    .focus-ring-inner {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 60px;
-      height: 60px;
-      border: 2px solid var(--accent);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      transition: all 0.3s ease;
-      box-shadow: 0 0 20px var(--accent-glow);
-    }
-
-    .focus-target {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 24px;
-      height: 24px;
-      transform: translate(-50%, -50%);
-    }
-
-    .focus-target::before,
-    .focus-target::after {
-      content: '';
-      position: absolute;
-      background: var(--accent);
-    }
-
-    .focus-target::before {
-      top: 50%;
-      left: 0;
-      width: 100%;
-      height: 1px;
-      transform: translateY(-50%);
-    }
-
-    .focus-target::after {
-      left: 50%;
-      top: 0;
-      width: 1px;
-      height: 100%;
-      transform: translateX(-50%);
-    }
-
-    .focus-dot {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 50px;
-      height: 50px;
-      border: 2px solid var(--text);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      cursor: pointer;
-      transition: all 0.15s ease;
-      opacity: 0.6;
-    }
-
-    .focus-dot.aligned {
-      border-color: var(--accent);
-      opacity: 1;
-      box-shadow: 0 0 30px var(--accent-glow);
-    }
-
-    .focus-dot.locked {
-      animation: lock-pulse 0.5s ease;
-    }
-
-    @keyframes lock-pulse {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); }
-      50% { transform: translate(-50%, -50%) scale(1.2); }
-    }
-
-    .progress-ring {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 80px;
-      height: 80px;
-      transform: translate(-50%, -50%);
-    }
-
-    .progress-ring circle {
-      fill: none;
-      stroke-width: 2;
-      transform-origin: center;
-      transform: rotate(-90deg);
-    }
-
-    .progress-ring .progress-bg {
-      stroke: rgba(255, 255, 255, 0.1);
-    }
-
-    .progress-ring .progress-fill {
-      stroke: var(--accent);
-      stroke-dasharray: 220;
-      stroke-dashoffset: 220;
-      transition: stroke-dashoffset 0.1s linear;
-    }
-
-    .unlock-hint {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      opacity: 0;
-      animation: fade-in-up 0.6s ease forwards;
-      animation-delay: 0.8s;
-    }
-
     /* ========== CONTACT SCREEN ========== */
   /* ===== CONTACT SCREEN (FINAL FIX) ===== */
 .contact-screen {
@@ -1156,30 +971,7 @@
       </div>
     </div>
 
-    <!-- Unlock Screen -->
-    <div class="screen unlock-screen" id="unlockScreen">
-      <div class="unlock-instruction">
-        <h2>Focus to Unlock</h2>
-        <p>Drag the ring to align with the center, then hold</p>
-      </div>
-
-      <div class="focus-ring-container" id="focusRingContainer">
-        <div class="focus-ring-outer"></div>
-        <div class="focus-ring-middle"></div>
-        <div class="focus-ring-inner"></div>
-        <div class="focus-target"></div>
-
-        <svg class="progress-ring" viewBox="0 0 80 80">
-          <circle class="progress-bg" cx="40" cy="40" r="35"/>
-          <circle class="progress-fill" cx="40" cy="40" r="35" id="progressFill"/>
-        </svg>
-
-        <div class="focus-dot" id="focusDot"></div>
-      </div>
-
-      <p class="unlock-hint">Align and hold to reveal contact</p>
-    </div>
-
+   
     <!-- Contact Screen -->
     <div class="screen contact-screen" id="contactScreen">
       <div class="contact-content" id="contactContent">
@@ -1327,22 +1119,32 @@
     </div>
   </div>
 <script>
-/* ===== MOOD SELECTION FIX ===== */
+/* ===== FINAL MOOD → CONTACT FLOW ===== */
 document.querySelectorAll('.mood-option').forEach(option => {
   option.addEventListener('click', () => {
     const mood = option.dataset.mood;
 
-    // set mood
+    // save mood
     state.selectedMood = mood;
 
-    // apply theme
-    document.body.className = `theme-${mood}`;
+    // apply theme (calm / energetic / cinematic)
+    document.body.classList.remove(
+      "theme-calm",
+      "theme-energetic",
+      "theme-cinematic"
+    );
+    document.body.classList.add(`theme-${mood}`);
 
-    // go to unlock screen
+    // hide mood screen
     elements.moodScreen.classList.remove('active');
-    elements.unlockScreen.classList.add('active');
 
-    // show back button + mood indicator if needed
+    // small delay for smooth transition
+    setTimeout(() => {
+      elements.contactScreen.classList.add('active');
+      document.getElementById('contactContent').classList.add('visible');
+    }, 300);
+
+    // mood indicator
     document.getElementById('moodIndicator').classList.add('visible');
     document.getElementById('moodIndicatorText').textContent =
       mood.charAt(0).toUpperCase() + mood.slice(1);
@@ -1360,7 +1162,6 @@ const state = {
 /* ================= ELEMENTS ================= */
 const elements = {
   moodScreen: document.getElementById('moodScreen'),
-  unlockScreen: document.getElementById('unlockScreen'),
   contactScreen: document.getElementById('contactScreen'),
   projectModal: document.getElementById('projectModal'),
   modalClose: document.getElementById('modalClose'),
@@ -1374,11 +1175,11 @@ const elements = {
 /* ================= SCREENS ================= */
 function showScreen(name) {
   elements.moodScreen.classList.remove('active');
-  elements.unlockScreen.classList.remove('active');
   elements.contactScreen.classList.remove('active');
 
   if (name === 'mood') elements.moodScreen.classList.add('active');
-  if (name === 'unlock') elements.unlockScreen.classList.add('active');
+
+  
   if (name === 'contact') elements.contactScreen.classList.add('active');
 
   state.currentScreen = name;
@@ -1453,85 +1254,11 @@ Thank you!
   }, 1200);
 });
 </script>
-  <script>
-/* ===== FOCUS RING UNLOCK LOGIC ===== */
-const focusDot = document.getElementById("focusDot");
-const focusContainer = document.getElementById("focusRingContainer");
-const progressFill = document.getElementById("progressFill");
-
-let dragging = false;
-let progress = 0;
-let holdInterval = null;
-
-focusDot.addEventListener("pointerdown", e => {
-  dragging = true;
-  focusDot.setPointerCapture(e.pointerId);
-});
-
-window.addEventListener("pointermove", e => {
-  if (!dragging) return;
-
-  const rect = focusContainer.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-
-  focusDot.style.left = `${x}px`;
-  focusDot.style.top = `${y}px`;
-  focusDot.style.transform = "translate(-50%, -50%)";
-
-  const cx = rect.width / 2;
-  const cy = rect.height / 2;
-
-  const dist = Math.hypot(x - cx, y - cy);
-
-  if (dist < 10) {
-    focusDot.classList.add("aligned");
-    startHold();
-  } else {
-    focusDot.classList.remove("aligned");
-    resetHold();
-  }
-});
-
-window.addEventListener("pointerup", () => {
-  dragging = false;
-  resetHold();
-});
-
-function startHold() {
-  if (holdInterval) return;
-
-  holdInterval = setInterval(() => {
-    progress += 4;
-    progressFill.style.strokeDashoffset = 220 - (220 * progress) / 100;
-
-    if (progress >= 100) {
-      clearInterval(holdInterval);
-      focusDot.classList.add("locked");
-      unlockComplete();
-    }
-  }, 30);
-}
-
-function resetHold() {
-  clearInterval(holdInterval);
-  holdInterval = null;
-  progress = 0;
-  progressFill.style.strokeDashoffset = 220;
-}
-
-function unlockComplete() {
-  setTimeout(() => {
-    elements.unlockScreen.classList.remove("active");
-    elements.contactScreen.classList.add("active");
-    document.getElementById("contactContent").classList.add("visible");
-  }, 400);
-}
-</script>
-
+  
 
 </body>
 </html>
+
 
 
 
