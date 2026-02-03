@@ -77,6 +77,11 @@
       z-index: 0;
       overflow: hidden;
     }
+/* Smooth ambient transitions */
+.ambient-effects * {
+  transition: opacity 1.2s cubic-bezier(.4,0,.2,1),
+              transform 1.2s cubic-bezier(.4,0,.2,1);
+}
 
     /* Film Grain Overlay */
     .grain {
@@ -110,7 +115,7 @@
       border-radius: 50%;
       background: var(--accent-glow);
       filter: blur(120px);
-      opacity: 0.6;
+      opacity: 0;
       transition: opacity var(--transition-speed) ease, background var(--transition-speed) ease;
     }
 
@@ -145,7 +150,7 @@
       position: absolute;
       width: 100%;
       height: 100%;
-      opacity: 0.5;
+      opacity: 0;
       transition: opacity var(--transition-speed) ease;
     }
 
@@ -196,17 +201,24 @@
     }
 
     /* Screen Base Styles */
-    .screen {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity:1;
-      visibility: hidden;
-      transition: opacity calc(var(--transition-speed) * 0.8) ease, visibility calc(var(--transition-speed) * 0.8) ease;
-    }
+   .screen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.9s cubic-bezier(.4,0,.2,1),
+              visibility 0.9s;
+}
+.screen.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
 
     /* Contact screen scroll + top alignment fix */
 .contact-screen {
@@ -1144,7 +1156,7 @@
 }
 
 .car-ring.drift{
-  animation:car-drift 1.4s ease-in-out forwards;
+  animation: car-drift 1.4s cubic-bezier(.22,.61,.36,1) forwards;
 }
 
 .car-ring.drift .ring-text{
@@ -1155,6 +1167,12 @@
   0%{transform:rotate(0deg)}
   65%{transform:rotate(430deg)}
   100%{transform:rotate(360deg)}
+}
+
+ .car-ring,
+.screen,
+.ambient-glow {
+  will-change: transform, opacity;
 }
 
   </style>
@@ -1518,19 +1536,23 @@ carRing.addEventListener("click", () => {
   carRing.classList.add("drift");
 
   setTimeout(() => {
-    elements.unlockScreen.classList.remove("active");
+  elements.unlockScreen.classList.remove("active");
+
+  setTimeout(() => {
     elements.contactScreen.classList.add("active");
 
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       document
         .getElementById("contactContent")
         .classList.add("visible");
-    }, 100);
-  }, 1200); // matches drift animation
-});
+    });
+  }, 200);
+}, 1400);
+ // matches drift animation
 </script>
 </body>
 </html>
+
 
 
 
