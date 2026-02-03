@@ -552,6 +552,12 @@
       opacity: 0;
       transform: translateY(30px);
     }
+    /* 🔒 HARD FAILSAFE — NEVER ALLOW INVISIBLE CONTACT UI */
+.contact-screen.active .contact-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 
     .contact-content.visible {
       animation: reveal-content 1s ease forwards;
@@ -1555,23 +1561,19 @@ carRing.addEventListener("click", () => {
     elements.unlockScreen.classList.remove("active");
 
     // show contact screen
-    setTimeout(() => {
-      elements.contactScreen.classList.add("active");
+   setTimeout(() => {
+  elements.contactScreen.classList.add("active");
 
-      // IMPORTANT: reset + re-trigger animation AFTER screen is visible
-      setTimeout(() => {
-        contactContent.classList.remove("visible");
-        void contactContent.offsetWidth; // force reflow
-        contactContent.classList.add("visible");
-      }, 500); // matches screen fade duration
+  setTimeout(() => {
+    contactContent.classList.add("visible");
+  }, 400);
 
-    }, 200);
+}, 200);
 
-  }, 1400); // matches car drift animation
-});
 </script>
 </body>
 </html>
+
 
 
 
