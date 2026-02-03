@@ -1117,6 +1117,7 @@
   height:200px;
   border-radius:50%;
   cursor:pointer;
+  transform-origin: 50% 50%;
 }
 
 .ring-track{
@@ -1156,8 +1157,6 @@
   transition:.4s;
 }
 
-.car-ring.drift{
-  animation: car-drift 1.4s cubic-bezier(.22,.61,.36,1) forwards;
 }
 
 .car-ring.drift .ring-text{
@@ -1533,26 +1532,34 @@ function randomCarStart() {
 
 randomCarStart();
 
+let unlocked = false;
+
 carRing.addEventListener("click", () => {
+  if (unlocked) return;
+  unlocked = true;
+
+  ringText.style.opacity = "0";
   carRing.classList.add("drift");
 
   setTimeout(() => {
-  elements.unlockScreen.classList.remove("active");
+    elements.unlockScreen.classList.remove("active");
 
-  setTimeout(() => {
-    elements.contactScreen.classList.add("active");
+    setTimeout(() => {
+      elements.contactScreen.classList.add("active");
 
-    requestAnimationFrame(() => {
-      document
-        .getElementById("contactContent")
-        .classList.add("visible");
-    });
-  }, 200);
-}, 1400);
+      requestAnimationFrame(() => {
+        document
+          .getElementById("contactContent")
+          .classList.add("visible");
+      });
+    }, 200);
+  }, 1400);
+});
  // matches drift animation
 </script>
 </body>
 </html>
+
 
 
 
