@@ -880,16 +880,25 @@
     }
 
     @media (max-width: 480px) {
-      .mood-options {
-        flex-direction: column;
-        align-items: center;
-      }
+  .mood-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    justify-items: center;
+  }
 
-      .mood-option {
-        width: 100%;
-        max-width: 200px;
-        height: 120px;
-      }
+  .mood-option {
+    width: 140px;
+    height: 170px;
+  }
+
+  /* cinematic card centered alone in 2nd row */
+  .mood-option[data-mood="cinematic"] {
+    grid-column: span 2;
+    justify-self: center;
+    width: 160px;
+  }
+}
 
       .contact-methods {
         gap: 0.75rem;
@@ -1258,6 +1267,7 @@ Thank you!
 
 </body>
 </html>
+
 
 
 
