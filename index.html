@@ -1174,7 +1174,6 @@
   transition:.4s;
 }
 
-}
 
 .car-ring.drift .ring-text{
   opacity:0;
@@ -1536,7 +1535,7 @@ Mood: ${state.selectedMood}
   }, 1200);
 });
 </script>
- <script>
+<script>
 /* ===== CAR DRIFT UNLOCK LOGIC ===== */
 const carRing = document.getElementById("carRing");
 const carIcon = document.getElementById("carIcon");
@@ -1544,7 +1543,7 @@ const ringText = document.getElementById("ringText");
 
 function randomCarStart() {
   const angle = Math.random() * 360;
-  carIcon.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+  carIcon.style.transform = `rotate(${angle}deg) translateY(-100px)`;
 }
 
 randomCarStart();
@@ -1564,18 +1563,19 @@ carRing.addEventListener("click", () => {
     setTimeout(() => {
       elements.contactScreen.classList.add("active");
 
-      requestAnimationFrame(() => {
+      setTimeout(() => {
         document
           .getElementById("contactContent")
           .classList.add("visible");
-      });
+      }, 50);
+
     }, 200);
   }, 1400);
 });
- // matches drift animation
 </script>
 </body>
 </html>
+
 
 
 
