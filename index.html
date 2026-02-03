@@ -1527,16 +1527,16 @@ Mood: ${state.selectedMood}
 });
 </script>
 <script>
-/* ===== CAR DRIFT UNLOCK LOGIC ===== */
+/* ===== CAR DRIFT UNLOCK LOGIC (FIXED) ===== */
 const carRing = document.getElementById("carRing");
 const carIcon = document.getElementById("carIcon");
 const ringText = document.getElementById("ringText");
+const contactContent = document.getElementById("contactContent");
 
 function randomCarStart() {
   const angle = Math.random() * 360;
   carIcon.style.transform = `rotate(${angle}deg) translateY(-100px)`;
 }
-
 randomCarStart();
 
 let unlocked = false;
@@ -1548,24 +1548,31 @@ carRing.addEventListener("click", () => {
   ringText.style.opacity = "0";
   carIcon.classList.add("drift");
 
+  // wait for car drift animation
   setTimeout(() => {
+
+    // hide unlock screen
     elements.unlockScreen.classList.remove("active");
 
+    // show contact screen
     setTimeout(() => {
       elements.contactScreen.classList.add("active");
 
+      // IMPORTANT: reset + re-trigger animation AFTER screen is visible
       setTimeout(() => {
-        document
-          .getElementById("contactContent")
-          .classList.add("visible");
-      }, 50);
+        contactContent.classList.remove("visible");
+        void contactContent.offsetWidth; // force reflow
+        contactContent.classList.add("visible");
+      }, 500); // matches screen fade duration
 
     }, 200);
-  }, 1400);
+
+  }, 1400); // matches car drift animation
 });
 </script>
 </body>
 </html>
+
 
 
 
