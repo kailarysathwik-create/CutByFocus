@@ -1533,7 +1533,7 @@ Mood: ${state.selectedMood}
 });
 </script>
 <script>
-/* ===== CAR DRIFT UNLOCK LOGIC (FIXED) ===== */
+/* ===== CAR DRIFT UNLOCK LOGIC (FINAL, FIXED) ===== */
 const carRing = document.getElementById("carRing");
 const carIcon = document.getElementById("carIcon");
 const ringText = document.getElementById("ringText");
@@ -1551,28 +1551,35 @@ carRing.addEventListener("click", () => {
   if (unlocked) return;
   unlocked = true;
 
+  // hide tap text
   ringText.style.opacity = "0";
+
+  // start car drift
   carIcon.classList.add("drift");
 
-  // wait for car drift animation
+  // wait for car animation
   setTimeout(() => {
 
     // hide unlock screen
     elements.unlockScreen.classList.remove("active");
 
     // show contact screen
-   setTimeout(() => {
-  elements.contactScreen.classList.add("active");
+    setTimeout(() => {
+      elements.contactScreen.classList.add("active");
 
-  setTimeout(() => {
-    contactContent.classList.add("visible");
-  }, 400);
+      // reveal contact content
+      setTimeout(() => {
+        contactContent.classList.add("visible");
+      }, 400);
 
-}, 200);
+    }, 200);
 
+  }, 1400);
+});
 </script>
 </body>
 </html>
+
 
 
 
