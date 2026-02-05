@@ -5,47 +5,59 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <meta name="google-site-verification" content="6DhirPDLkbbhnSHoqn0RRtZOsAgOb66HtQuiri5LLKE" />
+
+  <meta name="google-site-verification" content="6DhirPDLkbbhnSHoqn0RRtZOsAgOb66HtQuiri5LLKE" />
+  <link rel="icon" type="image/png" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
+
   <title>Cut by Focus-Freelance Video Editor</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
-    #intro {
+   /* ===== INTRO SCREEN ===== */
+#introScreen {
   position: fixed;
   inset: 0;
-  background: #05070c;
+  background: #05070d;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  animation: introFadeOut 1.2s ease forwards;
-  animation-delay: 2.8s;
+  animation: introFadeOut 2.2s ease forwards;
+  animation-delay: 2.2s;
 }
 
-#intro img {
+#introScreen img {
   width: 140px;
   opacity: 0;
   transform: scale(0.85);
-  animation: logoReveal 2s ease forwards;
+  animation: logoGlow 2s ease forwards;
 }
 
-@keyframes logoReveal {
+/* Logo glow animation */
+@keyframes logoGlow {
   0% {
     opacity: 0;
     transform: scale(0.85);
-    filter: drop-shadow(0 0 0 rgba(212,175,55,0));
+    filter: drop-shadow(0 0 0px rgba(212,175,55,0));
   }
-  60% {
+  40% {
     opacity: 1;
     transform: scale(1);
-    filter: drop-shadow(0 0 35px rgba(212,175,55,0.55));
+    filter: drop-shadow(0 0 25px rgba(212,175,55,0.5));
+  }
+  70% {
+    filter: drop-shadow(0 0 45px rgba(212,175,55,0.8));
   }
   100% {
-    filter: drop-shadow(0 0 15px rgba(212,175,55,0.35));
+    opacity: 1;
+    transform: scale(1);
+    filter: drop-shadow(0 0 15px rgba(212,175,55,0.4));
   }
 }
 
+/* Intro screen fade out */
 @keyframes introFadeOut {
   to {
     opacity: 0;
@@ -970,7 +982,8 @@
   </style>
 </head>
 <body>
-  <div id="intro">
+ <!-- Intro Screen -->
+<div id="introScreen">
   <img src="logo.png" alt="Cut by Focus Logo" />
 </div>
 
@@ -1318,15 +1331,17 @@ Thank you!
 </script>
   
 <script>
-  window.addEventListener("load", () => {
-    setTimeout(() => {
-      document.getElementById("intro")?.remove();
-    }, 4200);
-  });
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    const intro = document.getElementById("introScreen");
+    if (intro) intro.remove();
+  }, 4500);
+});
 </script>
 
 </body>
 </html>
+
 
 
 
