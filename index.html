@@ -11,6 +11,48 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
+    #intro {
+  position: fixed;
+  inset: 0;
+  background: #05070c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: introFadeOut 1.2s ease forwards;
+  animation-delay: 2.8s;
+}
+
+#intro img {
+  width: 140px;
+  opacity: 0;
+  transform: scale(0.85);
+  animation: logoReveal 2s ease forwards;
+}
+
+@keyframes logoReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+    filter: drop-shadow(0 0 0 rgba(212,175,55,0));
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1);
+    filter: drop-shadow(0 0 35px rgba(212,175,55,0.55));
+  }
+  100% {
+    filter: drop-shadow(0 0 15px rgba(212,175,55,0.35));
+  }
+}
+
+@keyframes introFadeOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
     *, *::before, *::after {
       margin: 0;
       padding: 0;
@@ -928,6 +970,10 @@
   </style>
 </head>
 <body>
+  <div id="intro">
+  <img src="logo.png" alt="Cut by Focus Logo" />
+</div>
+
   <!-- Ambient Effects Layer -->
   <div class="ambient-effects">
     <div class="grain"></div>
@@ -1271,9 +1317,17 @@ Thank you!
 });
 </script>
   
+<script>
+  window.addEventListener("load", () => {
+    setTimeout(() => {
+      document.getElementById("intro")?.remove();
+    }, 4200);
+  });
+</script>
 
 </body>
 </html>
+
 
 
 
