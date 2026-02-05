@@ -29,31 +29,42 @@
 }
 
 #introScreen img {
-  width: 140px;
+  width: 150px;
   opacity: 0;
   transform: scale(0.85);
-  animation: logoGlow 2s ease forwards;
+  animation: logoGlow 2.2s ease forwards;
+  will-change: transform, filter, opacity;
 }
 
 /* Logo glow animation */
 @keyframes logoGlow {
   0% {
     opacity: 0;
-    transform: scale(0.85);
-    filter: drop-shadow(0 0 0px rgba(212,175,55,0));
+    transform: scale(0.8);
+    filter:
+      drop-shadow(0 0 0 rgba(212,175,55,0));
   }
+
   40% {
     opacity: 1;
     transform: scale(1);
-    filter: drop-shadow(0 0 25px rgba(212,175,55,0.5));
+    filter:
+      drop-shadow(0 0 25px rgba(212,175,55,0.5))
+      drop-shadow(0 0 45px rgba(212,175,55,0.35));
   }
+
   70% {
-    filter: drop-shadow(0 0 45px rgba(212,175,55,0.8));
+    filter:
+      drop-shadow(0 0 45px rgba(212,175,55,0.9))
+      drop-shadow(0 0 90px rgba(212,175,55,0.4));
   }
+
   100% {
     opacity: 1;
     transform: scale(1);
-    filter: drop-shadow(0 0 15px rgba(212,175,55,0.4));
+    filter:
+      drop-shadow(0 0 18px rgba(212,175,55,0.6))
+      drop-shadow(0 0 35px rgba(212,175,55,0.3));
   }
 }
 
@@ -70,6 +81,24 @@
       padding: 0;
       box-sizing: border-box;
     }
+#introScreen::before {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(
+    circle,
+    rgba(212,175,55,0.25),
+    transparent 70%
+  );
+  filter: blur(60px);
+  animation: pulseGlow 2.5s ease infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
 
     :root {
       /* Calm Theme */
@@ -1341,6 +1370,7 @@ window.addEventListener("load", () => {
 
 </body>
 </html>
+
 
 
 
